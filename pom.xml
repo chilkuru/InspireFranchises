@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.inspire</groupId>
+    <artifactId>inspire-franchises-automation</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Inspire Brands Franchising Automation Framework</name>
+    <description>
+        Selenium + TestNG Page-Factory automation framework for
+        https://www.franchising.inspirebrands.com
+    </description>
+
+    <!-- ─────────────────────────────── PROPERTIES ─────────────────────────────── -->
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- dependency versions -->
+        <selenium.version>4.21.0</selenium.version>
+        <testng.version>7.10.2</testng.version>
+        <webdrivermanager.version>6.3.4</webdrivermanager.version>
+        <extentreports.version>5.1.2</extentreports.version>
+        <log4j.version>2.23.1</log4j.version>
+
+        <!-- defaults – overridden by Maven profiles or -D flags -->
+        <active.brand>all</active.brand>
+        <testng.suite.file>testng-suites/testng-all.xml</testng.suite.file>
+    </properties>
+
+    <!-- ─────────────────────────────── DEPENDENCIES ──────────────────────────── -->
+    <dependencies>
+
+        <!-- Selenium WebDriver 4 -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- WebDriverManager – auto-downloads browser drivers -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
+        </dependency>
+
+        <!-- TestNG -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+        </dependency>
+
+        <!-- Extent Reports 5 -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extentreports.version}</version>
+        </dependency>
+
+        <!-- Log4j2 (API + Core + SLF4J bridge) -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ─────────────────────────────── BUILD ─────────────────────────────────── -->
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
+        <plugins>
+
+            <!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>21</release>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire – wires TestNG suite + active.brand system property -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${testng.suite.file}</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <!-- Makes the brand value visible inside test JVM -->
+                        <active.brand>${active.brand}</active.brand>
+                        <!-- Pass -Dheadless=true / -Dbrowser=firefox through to the forked JVM -->
+                        <headless>${headless}</headless>
+                        <browser>${browser}</browser>
+                    </systemPropertyVariables>
+                    <!-- Keep Surefire from swallowing test output -->
+                    <useFile>false</useFile>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <!-- ─────────────────────────────── PROFILES ──────────────────────────────── -->
+    <!--
+        Usage:
+          mvn test -P arbys            → runs only Arby's tests
+          mvn test -P all-brands       → runs all brand tests (default)
+          mvn test -Dactive.brand=arbys -Dtestng.suite.file=testng-suites/testng-arbys.xml
+
+        To add a new brand:
+          1. Create testng-suites/testng-<brand>.xml
+          2. Add a <profile> block below following the same pattern
+    -->
+    <profiles>
+
+        <profile>
+            <id>arbys</id>
+            <properties>
+                <active.brand>arbys</active.brand>
+                <testng.suite.file>testng-suites/testng-arbys.xml</testng.suite.file>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>all-brands</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <active.brand>all</active.brand>
+                <testng.suite.file>testng-suites/testng-all.xml</testng.suite.file>
+            </properties>
+        </profile>
+
+    </profiles>
+
+</project>

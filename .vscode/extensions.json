@@ -1,0 +1,25 @@
+{
+    // VS Code will automatically prompt any user who clones this repo
+    // to install all of these extensions. They are the minimum required
+    // to compile, run, and debug the Selenium + TestNG test suite.
+    "recommendations": [
+        // ── Java Language Support ────────────────────────────────────────────────
+        // Provides Java IntelliSense, compilation, and project management.
+        "vscjava.vscode-java-pack",
+        // ── Maven for Java ───────────────────────────────────────────────────────
+        // Lets VS Code detect and use the Maven Wrapper (mvnw / mvnw.cmd).
+        // Users without a system-wide Maven install can still run 'mvn test'
+        // directly from the VS Code Maven panel.
+        "vscjava.vscode-maven",
+        // ── Test Runner for Java ─────────────────────────────────────────────────
+        // Adds the ▶ run/debug buttons next to every @Test method and provides
+        // the Test Explorer panel. Supports TestNG out of the box.
+        "vscjava.vscode-java-test",
+        // ── XML (for pom.xml & testng-suites XML) ────────────────────────────────
+        // Syntax highlighting, validation, and auto-complete for XML files.
+        "redhat.vscode-xml",
+        // ── Properties file support ──────────────────────────────────────────────
+        // Syntax highlighting for config.properties and brands/*.properties.
+        "dgileadi.java-properties"
+    ]
+}

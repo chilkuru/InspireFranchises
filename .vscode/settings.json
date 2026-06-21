@@ -1,0 +1,32 @@
+{
+    // ── Java compiler ────────────────────────────────────────────────────────
+    // Disable null-analysis warnings (not needed for test-only projects).
+    "java.compile.nullAnalysis.mode": "disabled",
+    // Target Java 21 bytecode to match the pom.xml compiler.release setting.
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "default": true
+        }
+    ],
+    // ── Maven ────────────────────────────────────────────────────────────────
+    // Prefer the Maven Wrapper (mvnw / mvnw.cmd) bundled in this repo over
+    // any system-wide Maven installation. This ensures every developer uses
+    // the same Maven version without a separate install.
+    "maven.executable.preferMavenWrapper": true,
+    "maven.executable.path": "",
+    // ── Test runner ──────────────────────────────────────────────────────────
+    // Tell the Java Test Runner which framework to use.
+    "java.test.defaultConfig": "testng",
+    // ── Editor quality-of-life ───────────────────────────────────────────────
+    "editor.formatOnSave": true,
+    "editor.rulers": [
+        120
+    ],
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    }
+}

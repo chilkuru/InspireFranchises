@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  testng-all.xml — Runs all test cases across all configured brand pages.
+
+  Usage:
+    mvn test -P all-brands
+    mvn test -Dtestng.suite.file=testng-suites/testng-all.xml
+
+  Groups available:
+    smoke        — fast sanity checks (run on every build)
+    regression   — full regression suite
+    home         — home page tests only
+    brand-common — tests common to every brand page
+    arbys        — Arby's-specific tests
+    navigation   — navigation/link tests
+    hero         — hero section tests
+    footer       — footer tests
+    qualification — franchise requirement tests
+    formats      — restaurant format tests
+-->
+<suite name="Inspire Brands – Full Regression Suite"
+       verbose="2"
+       parallel="false">
+
+    <!-- Register Extent listener for supplemental suite-level reporting -->
+    <listeners>
+        <listener class-name="com.inspire.listeners.ExtentReportListener"/>
+    </listeners>
+
+    <!-- ── Home Page Tests ──────────────────────────────────────────────────── -->
+    <test name="Home Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.HomePageTest"/>
+        </classes>
+    </test>
+
+    <!-- ── Arby's Page Tests (common + brand-specific) ─────────────────────── -->
+    <test name="Arby's Brand Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.brands.ArbysTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ── Future brand test classes – uncomment as brands are implemented ───────
+
+    <test name="Baskin-Robbins Brand Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.brands.BaskinRobbinsTest"/>
+        </classes>
+    </test>
+
+    <test name="Buffalo Wild Wings Brand Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.brands.BuffaloWildWingsTest"/>
+        </classes>
+    </test>
+
+    <test name="Dunkin' Brand Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.brands.DunkinTest"/>
+        </classes>
+    </test>
+
+    <test name="Jimmy John's Brand Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.brands.JimmyJohnsTest"/>
+        </classes>
+    </test>
+
+    <test name="SONIC Brand Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.brands.SonicTest"/>
+        </classes>
+    </test>
+    -->
+
+</suite>

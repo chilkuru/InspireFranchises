@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  testng-arbys.xml — Runs only Arby's-related tests (common brand tests +
+  Arby's-specific tests). Useful for brand-focused CI pipelines.
+
+  Usage:
+    mvn test -P arbys
+    mvn test -Dactive.brand=arbys -Dtestng.suite.file=testng-suites/testng-arbys.xml
+-->
+<suite name="Inspire Brands – Arby's Suite"
+       verbose="2"
+       parallel="false">
+
+    <listeners>
+        <listener class-name="com.inspire.listeners.ExtentReportListener"/>
+    </listeners>
+
+    <!-- ── Smoke Tests — fast sanity pass ──────────────────────────────────── -->
+    <test name="Arby's – Smoke Tests" preserve-order="true">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.inspire.tests.brands.ArbysTest"/>
+        </classes>
+    </test>
+
+    <!-- ── Full Regression — all Arby's tests ──────────────────────────────── -->
+    <test name="Arby's – Full Regression" preserve-order="true">
+        <groups>
+            <run>
+                <include name="regression"/>
+                <exclude name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.inspire.tests.brands.ArbysTest"/>
+        </classes>
+    </test>
+
+</suite>

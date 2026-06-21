@@ -1,0 +1,10 @@
+target/
+test-output/
+*.class
+*.iml
+.idea/
+.DS_Store
+
+# Keep the Maven Wrapper JAR out of source control —
+# mvnw / mvnw.cmd will download it automatically on first run.
+.mvn/wrapper/maven-wrapper.jar
