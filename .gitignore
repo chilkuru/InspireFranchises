@@ -5,6 +5,9 @@ test-output/
 .idea/
 .DS_Store
 
+# Office temp files (created while a file is open)
+~$*
+
 # Keep the Maven Wrapper JAR out of source control —
 # mvnw / mvnw.cmd will download it automatically on first run.
 .mvn/wrapper/maven-wrapper.jar
