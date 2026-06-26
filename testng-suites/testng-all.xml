@@ -43,6 +43,13 @@
         </classes>
     </test>
 
+    <!-- ── Baskin-Robbins Page Tests (common + brand-specific) ──────────────── -->
+    <test name="Baskin-Robbins Brand Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.brands.BaskinRobbinsTest"/>
+        </classes>
+    </test>
+
     <!--
       ── Future brand test classes – uncomment as brands are implemented ───────
 
