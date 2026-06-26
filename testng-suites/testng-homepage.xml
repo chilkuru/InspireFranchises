@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  testng-homepage.xml — Runs only HomePageTest (TC-H-01 through TC-H-11).
+
+  Usage:
+    .\mvnw.cmd clean test -P homepage
+    .\mvnw.cmd clean test -P homepage -Dgroups=smoke
+    .\mvnw.cmd clean test -P homepage -Dheadless=true
+-->
+<suite name="Inspire Brands – Home Page Tests"
+       verbose="2"
+       parallel="false">
+
+    <!-- Register Extent listener for supplemental suite-level reporting -->
+    <listeners>
+        <listener class-name="com.inspire.listeners.ExtentReportListener"/>
+    </listeners>
+
+    <!-- ── Home Page Tests ──────────────────────────────────────────────────── -->
+    <test name="Home Page Tests" preserve-order="true">
+        <classes>
+            <class name="com.inspire.tests.HomePageTest"/>
+        </classes>
+    </test>
+
+</suite>

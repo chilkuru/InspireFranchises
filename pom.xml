@@ -142,6 +142,14 @@
     <profiles>
 
         <profile>
+            <id>homepage</id>
+            <properties>
+                <active.brand>all</active.brand>
+                <testng.suite.file>testng-suites/testng-homepage.xml</testng.suite.file>
+            </properties>
+        </profile>
+
+        <profile>
             <id>arbys</id>
             <properties>
                 <active.brand>arbys</active.brand>
