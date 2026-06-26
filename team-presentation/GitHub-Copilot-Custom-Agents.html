@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,19 +10,21 @@
   <style>
     /* ── Brand Palette ───────────────────────────────────────────── */
     :root {
-      --navy:   #0d1b2a;
-      --dark:   #131c27;
-      --card:   #1a2740;
+      --navy: #0d1b2a;
+      --dark: #131c27;
+      --card: #1a2740;
       --border: #243450;
-      --gold:   #f5a623;
-      --blue:   #4a9eff;
-      --green:  #3ecf8e;
-      --red:    #ff6b6b;
-      --muted:  #7a92b0;
-      --text:   #e8edf5;
+      --gold: #f5a623;
+      --blue: #4a9eff;
+      --green: #3ecf8e;
+      --red: #ff6b6b;
+      --muted: #7a92b0;
+      --text: #e8edf5;
     }
 
-    .reveal-viewport { background: var(--navy); }
+    .reveal-viewport {
+      background: var(--navy);
+    }
 
     .reveal {
       font-family: 'Segoe UI', system-ui, sans-serif;
@@ -45,6 +48,7 @@
       text-align: center;
       border: 1px solid #2d4a7a;
     }
+
     .title-slide .eyebrow {
       font-size: 0.45em;
       color: var(--gold);
@@ -52,6 +56,7 @@
       text-transform: uppercase;
       margin-bottom: 12px;
     }
+
     .title-slide h1 {
       font-size: 1.5em;
       font-weight: 700;
@@ -59,26 +64,30 @@
       line-height: 1.2;
       margin: 0 0 16px;
     }
+
     .title-slide .subtitle {
       font-size: 0.5em;
       color: var(--muted);
       margin-bottom: 40px;
     }
+
     .title-slide .pill-row {
       display: flex;
       justify-content: center;
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .pill {
-      background: rgba(74,158,255,0.15);
-      border: 1px solid rgba(74,158,255,0.4);
+      background: rgba(74, 158, 255, 0.15);
+      border: 1px solid rgba(74, 158, 255, 0.4);
       color: var(--blue);
       border-radius: 20px;
       padding: 6px 18px;
       font-size: 0.38em;
       font-weight: 600;
     }
+
     .gold-line {
       width: 80px;
       height: 3px;
@@ -96,6 +105,7 @@
       padding-bottom: 14px;
       border-bottom: 1px solid var(--border);
     }
+
     .slide-header .icon {
       width: 44px;
       height: 44px;
@@ -106,16 +116,30 @@
       font-size: 22px;
       flex-shrink: 0;
     }
-    .icon-gold  { background: rgba(245,166,35,0.18);  }
-    .icon-blue  { background: rgba(74,158,255,0.18);  }
-    .icon-green { background: rgba(62,207,142,0.18);  }
-    .icon-red   { background: rgba(255,107,107,0.18); }
+
+    .icon-gold {
+      background: rgba(245, 166, 35, 0.18);
+    }
+
+    .icon-blue {
+      background: rgba(74, 158, 255, 0.18);
+    }
+
+    .icon-green {
+      background: rgba(62, 207, 142, 0.18);
+    }
+
+    .icon-red {
+      background: rgba(255, 107, 107, 0.18);
+    }
+
     .slide-header h2 {
       font-size: 0.65em;
       font-weight: 700;
       color: #fff;
       margin: 0;
     }
+
     .slide-header .badge {
       margin-left: auto;
       font-size: 0.32em;
@@ -132,8 +156,14 @@
       display: grid;
       gap: 14px;
     }
-    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
-    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card-grid.cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .card-grid.cols-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
 
     .card {
       background: var(--card);
@@ -141,6 +171,7 @@
       border-radius: 10px;
       padding: 18px 20px;
     }
+
     .card .card-title {
       font-size: 0.42em;
       font-weight: 700;
@@ -150,12 +181,16 @@
       align-items: center;
       gap: 8px;
     }
+
     .card .card-body {
       font-size: 0.36em;
       color: var(--muted);
       line-height: 1.55;
     }
-    .card .card-body li { margin-bottom: 5px; }
+
+    .card .card-body li {
+      margin-bottom: 5px;
+    }
 
     /* ── Comparison table ─────────────────────────────────────────── */
     .compare-table {
@@ -163,6 +198,7 @@
       border-collapse: collapse;
       font-size: 0.38em;
     }
+
     .compare-table th {
       background: var(--card);
       color: var(--gold);
@@ -171,16 +207,30 @@
       text-align: left;
       border-bottom: 2px solid var(--border);
     }
+
     .compare-table td {
       padding: 9px 16px;
       border-bottom: 1px solid var(--border);
       color: var(--text);
       vertical-align: top;
     }
-    .compare-table tr:hover td { background: rgba(255,255,255,0.03); }
-    .win  { color: var(--green); font-weight: 600; }
-    .lose { color: var(--muted); }
-    .neutral { color: var(--gold); }
+
+    .compare-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .win {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .lose {
+      color: var(--muted);
+    }
+
+    .neutral {
+      color: var(--gold);
+    }
 
     /* ── Mode cards ───────────────────────────────────────────────── */
     .mode-card {
@@ -191,15 +241,28 @@
       position: relative;
       overflow: hidden;
     }
+
     .mode-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 3px;
     }
-    .mode-ask::before   { background: var(--blue); }
-    .mode-plan::before  { background: var(--gold); }
-    .mode-agent::before { background: var(--green); }
+
+    .mode-ask::before {
+      background: var(--blue);
+    }
+
+    .mode-plan::before {
+      background: var(--gold);
+    }
+
+    .mode-agent::before {
+      background: var(--green);
+    }
+
     .mode-card .mode-tag {
       font-size: 0.32em;
       font-weight: 700;
@@ -210,21 +273,38 @@
       margin-bottom: 10px;
       display: inline-block;
     }
-    .mode-ask .mode-tag   { background: rgba(74,158,255,0.2);  color: var(--blue);  }
-    .mode-plan .mode-tag  { background: rgba(245,166,35,0.2);  color: var(--gold);  }
-    .mode-agent .mode-tag { background: rgba(62,207,142,0.2);  color: var(--green); }
+
+    .mode-ask .mode-tag {
+      background: rgba(74, 158, 255, 0.2);
+      color: var(--blue);
+    }
+
+    .mode-plan .mode-tag {
+      background: rgba(245, 166, 35, 0.2);
+      color: var(--gold);
+    }
+
+    .mode-agent .mode-tag {
+      background: rgba(62, 207, 142, 0.2);
+      color: var(--green);
+    }
+
     .mode-card .mode-title {
       font-size: 0.5em;
       font-weight: 700;
       color: #fff;
       margin-bottom: 10px;
     }
+
     .mode-card .mode-body {
       font-size: 0.35em;
       color: var(--muted);
       line-height: 1.55;
     }
-    .mode-card .mode-body li { margin-bottom: 4px; }
+
+    .mode-card .mode-body li {
+      margin-bottom: 4px;
+    }
 
     /* ── Step flow ────────────────────────────────────────────────── */
     .step-flow {
@@ -232,6 +312,7 @@
       gap: 0;
       align-items: stretch;
     }
+
     .step {
       flex: 1;
       background: var(--card);
@@ -241,8 +322,15 @@
       position: relative;
       text-align: center;
     }
-    .step:first-child { border-radius: 10px 0 0 10px; }
-    .step:last-child  { border-radius: 0 10px 10px 0; }
+
+    .step:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .step:last-child {
+      border-radius: 0 10px 10px 0;
+    }
+
     .step .step-num {
       width: 32px;
       height: 32px;
@@ -256,12 +344,14 @@
       justify-content: center;
       margin: 0 auto 8px;
     }
+
     .step .step-title {
       font-size: 0.34em;
       font-weight: 700;
       color: #fff;
       margin-bottom: 5px;
     }
+
     .step .step-body {
       font-size: 0.3em;
       color: var(--muted);
@@ -282,15 +372,27 @@
       overflow-x: auto;
       line-height: 1.6;
     }
-    .code-block .kw  { color: #ff79c6; }
-    .code-block .str { color: #f1fa8c; }
-    .code-block .cmt { color: #6272a4; }
-    .code-block .num { color: var(--green); }
+
+    .code-block .kw {
+      color: #ff79c6;
+    }
+
+    .code-block .str {
+      color: #f1fa8c;
+    }
+
+    .code-block .cmt {
+      color: #6272a4;
+    }
+
+    .code-block .num {
+      color: var(--green);
+    }
 
     /* ── Highlight box ────────────────────────────────────────────── */
     .highlight-box {
-      background: linear-gradient(135deg, rgba(74,158,255,0.1), rgba(62,207,142,0.08));
-      border: 1px solid rgba(74,158,255,0.3);
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), rgba(62, 207, 142, 0.08));
+      border: 1px solid rgba(74, 158, 255, 0.3);
       border-radius: 10px;
       padding: 16px 20px;
       font-size: 0.4em;
@@ -298,21 +400,40 @@
       margin-top: 14px;
       line-height: 1.55;
     }
-    .highlight-box strong { color: var(--gold); }
+
+    .highlight-box strong {
+      color: var(--gold);
+    }
 
     /* ── Tag list ─────────────────────────────────────────────────── */
-    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
     .tag {
-      background: rgba(74,158,255,0.12);
-      border: 1px solid rgba(74,158,255,0.3);
+      background: rgba(74, 158, 255, 0.12);
+      border: 1px solid rgba(74, 158, 255, 0.3);
       color: var(--blue);
       border-radius: 16px;
       padding: 4px 14px;
       font-size: 0.32em;
       font-weight: 600;
     }
-    .tag.green { background: rgba(62,207,142,0.12); border-color: rgba(62,207,142,0.3); color: var(--green); }
-    .tag.gold  { background: rgba(245,166,35,0.12);  border-color: rgba(245,166,35,0.3);  color: var(--gold);  }
+
+    .tag.green {
+      background: rgba(62, 207, 142, 0.12);
+      border-color: rgba(62, 207, 142, 0.3);
+      color: var(--green);
+    }
+
+    .tag.gold {
+      background: rgba(245, 166, 35, 0.12);
+      border-color: rgba(245, 166, 35, 0.3);
+      color: var(--gold);
+    }
 
     /* ── Table ────────────────────────────────────────────────────── */
     .data-table {
@@ -320,22 +441,25 @@
       border-collapse: collapse;
       font-size: 0.36em;
     }
+
     .data-table th {
-      background: rgba(74,158,255,0.12);
+      background: rgba(74, 158, 255, 0.12);
       color: var(--blue);
       padding: 9px 14px;
       text-align: left;
       font-weight: 700;
       border-bottom: 1px solid var(--border);
     }
+
     .data-table td {
       padding: 8px 14px;
       border-bottom: 1px solid var(--border);
       color: var(--text);
       vertical-align: top;
     }
+
     .data-table td code {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 4px;
       padding: 1px 6px;
       font-family: monospace;
@@ -351,7 +475,11 @@
       padding: 12px 0;
       border-bottom: 1px solid var(--border);
     }
-    .demo-step:last-child { border-bottom: none; }
+
+    .demo-step:last-child {
+      border-bottom: none;
+    }
+
     .demo-step .ds-num {
       width: 30px;
       height: 30px;
@@ -366,20 +494,26 @@
       flex-shrink: 0;
       margin-top: 2px;
     }
-    .demo-step .ds-content { flex: 1; }
+
+    .demo-step .ds-content {
+      flex: 1;
+    }
+
     .demo-step .ds-title {
       font-size: 0.4em;
       font-weight: 700;
       color: #fff;
       margin-bottom: 4px;
     }
+
     .demo-step .ds-body {
       font-size: 0.34em;
       color: var(--muted);
       line-height: 1.5;
     }
+
     .demo-step .ds-body code {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 4px;
       padding: 1px 6px;
       font-family: monospace;
@@ -397,420 +531,447 @@
     }
 
     /* ── Reveal overrides ─────────────────────────────────────────── */
-    .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
-    .reveal ul { margin: 0; padding-left: 0; list-style: none; }
-    .reveal ul li::before { content: "▸ "; color: var(--gold); }
-    .reveal .progress { color: var(--gold); }
-    .reveal .controls { color: var(--gold); }
+    .reveal h1,
+    .reveal h2,
+    .reveal h3 {
+      text-transform: none;
+    }
+
+    .reveal ul {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .reveal ul li::before {
+      content: "▸ ";
+      color: var(--gold);
+    }
+
+    .reveal .progress {
+      color: var(--gold);
+    }
+
+    .reveal .controls {
+      color: var(--gold);
+    }
   </style>
 </head>
-<body>
-<div class="reveal">
-<div class="slides">
 
-<!-- ══════════════════════════════════════════════════════════════════
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 01 — TITLE
 ═══════════════════════════════════════════════════════════════════ -->
-<section class="title-slide" data-slide-num="01">
-  <div class="eyebrow">Inspire Brands · Quality Engineering</div>
-  <h1>GitHub Copilot<br/>for Automation Frameworks</h1>
-  <div class="gold-line"></div>
-  <div class="subtitle">
-    From writing test code to building intelligent, self-documenting frameworks —<br/>
-    how AI-assisted development changes the game for QE teams.
-  </div>
-  <div class="pill-row">
-    <span class="pill">🤖 Agent Mode</span>
-    <span class="pill">⚡ Custom Agents</span>
-    <span class="pill">🧪 Selenium + TestNG</span>
-    <span class="pill">📊 Inspire Franchises Framework</span>
-  </div>
-</section>
+      <section class="title-slide" data-slide-num="01">
+        <div class="eyebrow">Inspire Brands · Quality Engineering</div>
+        <h1>GitHub Copilot<br />for Automation Frameworks</h1>
+        <div class="gold-line"></div>
+        <div class="subtitle">
+          From writing test code to building intelligent, self-documenting frameworks —<br />
+          how AI-assisted development changes the game for QE teams.
+        </div>
+        <div class="pill-row">
+          <span class="pill">🤖 Agent Mode</span>
+          <span class="pill">⚡ Custom Agents</span>
+          <span class="pill">🧪 Selenium + TestNG</span>
+          <span class="pill">📊 Inspire Franchises Framework</span>
+        </div>
+      </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+      <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 02 — WHY GITHUB COPILOT FOR AUTOMATION?
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="02">
-  <div class="slide-header">
-    <div class="icon icon-gold">🚀</div>
-    <h2>Why GitHub Copilot for Automation Frameworks?</h2>
-  </div>
-  <div class="card-grid cols-2">
-    <div class="card">
-      <div class="card-title">⏱ Accelerate Development</div>
-      <div class="card-body">
-        <ul>
-          <li>Generate Page Object classes from a URL in seconds</li>
-          <li>Auto-complete <code>@FindBy</code> locators using site context</li>
-          <li>Scaffold new brand test classes following existing patterns</li>
-          <li>Reduce boilerplate from hours to minutes</li>
-        </ul>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🧠 Understand the Entire Codebase</div>
-      <div class="card-body">
-        <ul>
-          <li>Ask questions about any class without reading it</li>
-          <li>Navigate complex inheritance chains instantly</li>
-          <li>Explain why a test is failing with context-aware analysis</li>
-          <li>Onboard new team members in minutes, not days</li>
-        </ul>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🔒 Keeps Code Inside Your Org</div>
-      <div class="card-body">
-        <ul>
-          <li>Runs inside VS Code — code never leaves your machine</li>
-          <li>Respects corporate network and security policies</li>
-          <li>GitHub Enterprise support for air-gapped environments</li>
-          <li>No external API calls with your proprietary test code</li>
-        </ul>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">📐 Enforces Team Standards</div>
-      <div class="card-body">
-        <ul>
-          <li>Custom agents encode your specific project rules</li>
-          <li>Consistent patterns across all developers and brands</li>
-          <li>Prevents re-discovery of already-solved problems</li>
-          <li>Hard-won fixes become permanent team knowledge</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+      <section data-slide-num="02">
+        <div class="slide-header">
+          <div class="icon icon-gold">🚀</div>
+          <h2>Why GitHub Copilot for Automation Frameworks?</h2>
+        </div>
+        <div class="card-grid cols-2">
+          <div class="card">
+            <div class="card-title">⏱ Accelerate Development</div>
+            <div class="card-body">
+              <ul>
+                <li>Generate Page Object classes from a URL in seconds</li>
+                <li>Auto-complete <code>@FindBy</code> locators using site context</li>
+                <li>Scaffold new brand test classes following existing patterns</li>
+                <li>Reduce boilerplate from hours to minutes</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">🧠 Understand the Entire Codebase</div>
+            <div class="card-body">
+              <ul>
+                <li>Ask questions about any class without reading it</li>
+                <li>Navigate complex inheritance chains instantly</li>
+                <li>Explain why a test is failing with context-aware analysis</li>
+                <li>Onboard new team members in minutes, not days</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">🔒 Keeps Code Inside Your Org</div>
+            <div class="card-body">
+              <ul>
+                <li>Runs inside VS Code — code never leaves your machine</li>
+                <li>Respects corporate network and security policies</li>
+                <li>GitHub Enterprise support for air-gapped environments</li>
+                <li>No external API calls with your proprietary test code</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">📐 Enforces Team Standards</div>
+            <div class="card-body">
+              <ul>
+                <li>Custom agents encode your specific project rules</li>
+                <li>Consistent patterns across all developers and brands</li>
+                <li>Prevents re-discovery of already-solved problems</li>
+                <li>Hard-won fixes become permanent team knowledge</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+      <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 03 — COPILOT vs CURSOR IDE
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="03">
-  <div class="slide-header">
-    <div class="icon icon-blue">⚔️</div>
-    <h2>GitHub Copilot vs Cursor IDE</h2>
-    <span class="badge">For Enterprise QE Teams</span>
-  </div>
-  <table class="compare-table">
-    <thead>
-      <tr>
-        <th>Dimension</th>
-        <th>GitHub Copilot</th>
-        <th>Cursor IDE</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>IDE Integration</strong></td>
-        <td class="win">✔ Runs inside VS Code — no context switch</td>
-        <td class="lose">Separate fork of VS Code</td>
-      </tr>
-      <tr>
-        <td><strong>Enterprise Security</strong></td>
-        <td class="win">✔ GitHub Enterprise + SSO + audit logs</td>
-        <td class="lose">Business plan required; limited enterprise controls</td>
-      </tr>
-      <tr>
-        <td><strong>Custom Agents</strong></td>
-        <td class="win">✔ .agent.md files committed to repo</td>
-        <td class="neutral">Rules files, no agent concept</td>
-      </tr>
-      <tr>
-        <td><strong>Team Knowledge Sharing</strong></td>
-        <td class="win">✔ Agent file in Git — everyone uses same rules</td>
-        <td class="lose">Settings per developer, hard to standardize</td>
-      </tr>
-      <tr>
-        <td><strong>Automation-Specific Tools</strong></td>
-        <td class="win">✔ execute/runTests, execute/testFailure, browser tools</td>
-        <td class="neutral">Generic code tools only</td>
-      </tr>
-      <tr>
-        <td><strong>Cost (per developer)</strong></td>
-        <td class="neutral">$19/mo (Business) — bundled with GitHub</td>
-        <td class="lose">$20/mo (Business) — separate subscription</td>
-      </tr>
-      <tr>
-        <td><strong>Licensing Model</strong></td>
-        <td class="win">✔ Already in GitHub org — no new vendor</td>
-        <td class="lose">New vendor relationship required</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+      <section data-slide-num="03">
+        <div class="slide-header">
+          <div class="icon icon-blue">⚔️</div>
+          <h2>GitHub Copilot vs Cursor IDE</h2>
+          <span class="badge">For Enterprise QE Teams</span>
+        </div>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>GitHub Copilot</th>
+              <th>Cursor IDE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>IDE Integration</strong></td>
+              <td class="win">✔ Runs inside VS Code — no context switch</td>
+              <td class="lose">Separate fork of VS Code</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise Security</strong></td>
+              <td class="win">✔ GitHub Enterprise + SSO + audit logs</td>
+              <td class="lose">Business plan required; limited enterprise controls</td>
+            </tr>
+            <tr>
+              <td><strong>Custom Agents</strong></td>
+              <td class="win">✔ .agent.md files committed to repo</td>
+              <td class="neutral">Rules files, no agent concept</td>
+            </tr>
+            <tr>
+              <td><strong>Team Knowledge Sharing</strong></td>
+              <td class="win">✔ Agent file in Git — everyone uses same rules</td>
+              <td class="lose">Settings per developer, hard to standardize</td>
+            </tr>
+            <tr>
+              <td><strong>Automation-Specific Tools</strong></td>
+              <td class="win">✔ execute/runTests, execute/testFailure, browser tools</td>
+              <td class="neutral">Generic code tools only</td>
+            </tr>
+            <tr>
+              <td><strong>Cost (per developer)</strong></td>
+              <td class="neutral">$19/mo (Business) — bundled with GitHub</td>
+              <td class="lose">$20/mo (Business) — separate subscription</td>
+            </tr>
+            <tr>
+              <td><strong>Licensing Model</strong></td>
+              <td class="win">✔ Already in GitHub org — no new vendor</td>
+              <td class="lose">New vendor relationship required</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+      <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 04 — COPILOT MODES: ASK / PLAN / AGENT
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="04">
-  <div class="slide-header">
-    <div class="icon icon-blue">💬</div>
-    <h2>GitHub Copilot — Three Interaction Modes</h2>
-    <span class="badge">Ctrl+Shift+I to open</span>
-  </div>
-  <!-- Actual VS Code screenshot of the mode picker -->
-  <div style="text-align:center; margin-bottom:12px;">
-    <img src="extracted-images/image1.png"
-         alt="VS Code Copilot mode picker showing Agent, Ask, Plan options"
-         style="height:80px; border-radius:8px; border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.4);" />
-    <div style="font-size:0.28em; color:var(--muted); margin-top:4px;">VS Code — Copilot mode picker (@ shortcut)</div>
-  </div>
-  <div class="card-grid cols-3">
-    <div class="mode-card mode-ask">
-      <div class="mode-tag">ASK</div>
-      <div class="mode-title">Ask Mode</div>
-      <div class="mode-body">
-        <ul>
-          <li>Conversational Q&amp;A about your code</li>
-          <li>Explains classes, methods, errors</li>
-          <li>Answers without making any changes</li>
-          <li>Best for: understanding, exploring, learning</li>
-        </ul>
-        <br/>
-        <em>"What does AbstractBrandPage do?"</em>
+      <section data-slide-num="04">
+        <div class="slide-header">
+          <div class="icon icon-blue">💬</div>
+          <h2>GitHub Copilot — Three Interaction Modes</h2>
+          <span class="badge">Ctrl+Shift+I to open</span>
+        </div>
+        <!-- Actual VS Code screenshot of the mode picker -->
+        <div style="text-align:center; margin-bottom:12px;">
+          <img src="extracted-images/image1.png" alt="VS Code Copilot mode picker showing Agent, Ask, Plan options"
+            style="height:80px; border-radius:8px; border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.4);" />
+          <div style="font-size:0.28em; color:var(--muted); margin-top:4px;">VS Code — Copilot mode picker (@ shortcut)
+          </div>
+        </div>
+        <div class="card-grid cols-3">
+          <div class="mode-card mode-ask">
+            <div class="mode-tag">ASK</div>
+            <div class="mode-title">Ask Mode</div>
+            <div class="mode-body">
+              <ul>
+                <li>Conversational Q&amp;A about your code</li>
+                <li>Explains classes, methods, errors</li>
+                <li>Answers without making any changes</li>
+                <li>Best for: understanding, exploring, learning</li>
+              </ul>
+              <br />
+              <em>"What does AbstractBrandPage do?"</em>
+            </div>
+          </div>
+          <div class="mode-card mode-plan">
+            <div class="mode-tag">PLAN</div>
+            <div class="mode-title">Plan Mode</div>
+            <div class="mode-body">
+              <ul>
+                <li>Researches and outlines multi-step tasks</li>
+                <li>Shows what it <em>would</em> do before acting</li>
+                <li>Ideal for reviewing changes before applying</li>
+                <li>Best for: complex refactoring, new features</li>
+              </ul>
+              <br />
+              <em>"Plan how to add Baskin Robbins brand"</em>
+            </div>
+          </div>
+          <div class="mode-card mode-agent">
+            <div class="mode-tag">AGENT</div>
+            <div class="mode-title">Agent Mode</div>
+            <div class="mode-body">
+              <ul>
+                <li>Autonomously reads, edits, and runs code</li>
+                <li>Uses tools: terminal, browser, file system</li>
+                <li>Iterates until the task is complete</li>
+                <li>Best for: end-to-end automation tasks</li>
+              </ul>
+              <br />
+              <em>"Add Baskin Robbins brand to the framework"</em>
+            </div>
+          </div>
+        </div>
+        <div class="highlight-box">
+          <strong>Tip:</strong> Start with <strong>Ask</strong> to understand, use <strong>Plan</strong> to review
+          scope, use <strong>Agent</strong> to execute.
+          For automation frameworks — <strong>Agent Mode + Custom Agent</strong> is the most powerful combination.
+        </div>
+      </section>
+      <div class="mode-card mode-ask">
+        <div class="mode-tag">ASK</div>
+        <div class="mode-title">Ask Mode</div>
+        <div class="mode-body">
+          <ul>
+            <li>Conversational Q&amp;A about your code</li>
+            <li>Explains classes, methods, errors</li>
+            <li>Answers without making any changes</li>
+            <li>Best for: understanding, exploring, learning</li>
+          </ul>
+          <br />
+          <em>"What does AbstractBrandPage do?"</em>
+        </div>
+      </div>
+      <div class="mode-card mode-plan">
+        <div class="mode-tag">PLAN</div>
+        <div class="mode-title">Plan Mode</div>
+        <div class="mode-body">
+          <ul>
+            <li>Researches and outlines multi-step tasks</li>
+            <li>Shows what it <em>would</em> do before acting</li>
+            <li>Ideal for reviewing changes before applying</li>
+            <li>Best for: complex refactoring, new features</li>
+          </ul>
+          <br />
+          <em>"Plan how to add Baskin Robbins brand"</em>
+        </div>
+      </div>
+      <div class="mode-card mode-agent">
+        <div class="mode-tag">AGENT</div>
+        <div class="mode-title">Agent Mode</div>
+        <div class="mode-body">
+          <ul>
+            <li>Autonomously reads, edits, and runs code</li>
+            <li>Uses tools: terminal, browser, file system</li>
+            <li>Iterates until the task is complete</li>
+            <li>Best for: end-to-end automation tasks</li>
+          </ul>
+          <br />
+          <em>"Add Baskin Robbins brand to the framework"</em>
+        </div>
       </div>
     </div>
-    <div class="mode-card mode-plan">
-      <div class="mode-tag">PLAN</div>
-      <div class="mode-title">Plan Mode</div>
-      <div class="mode-body">
-        <ul>
-          <li>Researches and outlines multi-step tasks</li>
-          <li>Shows what it <em>would</em> do before acting</li>
-          <li>Ideal for reviewing changes before applying</li>
-          <li>Best for: complex refactoring, new features</li>
-        </ul>
-        <br/>
-        <em>"Plan how to add Baskin Robbins brand"</em>
-      </div>
+    <div class="highlight-box">
+      <strong>Tip:</strong> Start with <strong>Ask</strong> to understand, use <strong>Plan</strong> to review scope,
+      use <strong>Agent</strong> to execute.
+      For automation frameworks — <strong>Agent Mode + Custom Agent</strong> is the most powerful combination.
     </div>
-    <div class="mode-card mode-agent">
-      <div class="mode-tag">AGENT</div>
-      <div class="mode-title">Agent Mode</div>
-      <div class="mode-body">
-        <ul>
-          <li>Autonomously reads, edits, and runs code</li>
-          <li>Uses tools: terminal, browser, file system</li>
-          <li>Iterates until the task is complete</li>
-          <li>Best for: end-to-end automation tasks</li>
-        </ul>
-        <br/>
-        <em>"Add Baskin Robbins brand to the framework"</em>
-      </div>
-    </div>
-  </div>
-  <div class="highlight-box">
-    <strong>Tip:</strong> Start with <strong>Ask</strong> to understand, use <strong>Plan</strong> to review scope, use <strong>Agent</strong> to execute. 
-    For automation frameworks — <strong>Agent Mode + Custom Agent</strong> is the most powerful combination.
-  </div>
-</section>
-    <div class="mode-card mode-ask">
-      <div class="mode-tag">ASK</div>
-      <div class="mode-title">Ask Mode</div>
-      <div class="mode-body">
-        <ul>
-          <li>Conversational Q&amp;A about your code</li>
-          <li>Explains classes, methods, errors</li>
-          <li>Answers without making any changes</li>
-          <li>Best for: understanding, exploring, learning</li>
-        </ul>
-        <br/>
-        <em>"What does AbstractBrandPage do?"</em>
-      </div>
-    </div>
-    <div class="mode-card mode-plan">
-      <div class="mode-tag">PLAN</div>
-      <div class="mode-title">Plan Mode</div>
-      <div class="mode-body">
-        <ul>
-          <li>Researches and outlines multi-step tasks</li>
-          <li>Shows what it <em>would</em> do before acting</li>
-          <li>Ideal for reviewing changes before applying</li>
-          <li>Best for: complex refactoring, new features</li>
-        </ul>
-        <br/>
-        <em>"Plan how to add Baskin Robbins brand"</em>
-      </div>
-    </div>
-    <div class="mode-card mode-agent">
-      <div class="mode-tag">AGENT</div>
-      <div class="mode-title">Agent Mode</div>
-      <div class="mode-body">
-        <ul>
-          <li>Autonomously reads, edits, and runs code</li>
-          <li>Uses tools: terminal, browser, file system</li>
-          <li>Iterates until the task is complete</li>
-          <li>Best for: end-to-end automation tasks</li>
-        </ul>
-        <br/>
-        <em>"Add Baskin Robbins brand to the framework"</em>
-      </div>
-    </div>
-  </div>
-  <div class="highlight-box">
-    <strong>Tip:</strong> Start with <strong>Ask</strong> to understand, use <strong>Plan</strong> to review scope, use <strong>Agent</strong> to execute. 
-    For automation frameworks — <strong>Agent Mode + Custom Agent</strong> is the most powerful combination.
-  </div>
-</section>
+    </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 05 — DEEP DIVE: AGENT MODE
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="05">
-  <div class="slide-header">
-    <div class="icon icon-green">🤖</div>
-    <h2>Deep Dive — Agent Mode</h2>
-  </div>
-  <div class="card-grid cols-2">
-    <div>
-      <div class="card" style="margin-bottom:14px;">
-        <div class="card-title">🔄 How Agent Mode Works</div>
-        <div class="card-body">
-          <ul>
-            <li>Receives your task in natural language</li>
-            <li>Reads relevant files in your workspace</li>
-            <li>Makes edits, runs terminal commands, runs tests</li>
-            <li>Reads output and iterates if something fails</li>
-            <li>Continues until the task succeeds</li>
-          </ul>
+    <section data-slide-num="05">
+      <div class="slide-header">
+        <div class="icon icon-green">🤖</div>
+        <h2>Deep Dive — Agent Mode</h2>
+      </div>
+      <div class="card-grid cols-2">
+        <div>
+          <div class="card" style="margin-bottom:14px;">
+            <div class="card-title">🔄 How Agent Mode Works</div>
+            <div class="card-body">
+              <ul>
+                <li>Receives your task in natural language</li>
+                <li>Reads relevant files in your workspace</li>
+                <li>Makes edits, runs terminal commands, runs tests</li>
+                <li>Reads output and iterates if something fails</li>
+                <li>Continues until the task succeeds</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">⚙️ Tools Agent Mode Can Use</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>File system</strong> — read, create, edit, rename files</li>
+                <li><strong>Terminal</strong> — run Maven, compile, execute tests</li>
+                <li><strong>Browser</strong> — open pages, take screenshots</li>
+                <li><strong>Search</strong> — semantic search across codebase</li>
+                <li><strong>Test runner</strong> — run and read test results</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px;">
+            <div class="card-title">✨ What Makes It Different</div>
+            <div class="card-body">
+              <ul>
+                <li>Not just code completion — it <em>acts</em></li>
+                <li>Multi-step reasoning across many files</li>
+                <li>Self-correcting: reads errors and fixes them</li>
+                <li>Combines reading + editing + executing in one loop</li>
+                <li>Works with your existing project structure</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">🎯 Real Example — Our Framework</div>
+            <div class="card-body">
+              <em>"Add Dunkin' brand to the framework"</em><br /><br />
+              Agent automatically:<br />
+              ▸ Creates DunkinPage.java with correct @FindBy<br />
+              ▸ Adds case DUNKIN: in BrandPageFactory<br />
+              ▸ Creates DunkinTest.java extending AbstractBrandTest<br />
+              ▸ Creates testng-dunkin.xml<br />
+              ▸ Runs smoke tests to verify ✅
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-title">⚙️ Tools Agent Mode Can Use</div>
-        <div class="card-body">
-          <ul>
-            <li><strong>File system</strong> — read, create, edit, rename files</li>
-            <li><strong>Terminal</strong> — run Maven, compile, execute tests</li>
-            <li><strong>Browser</strong> — open pages, take screenshots</li>
-            <li><strong>Search</strong> — semantic search across codebase</li>
-            <li><strong>Test runner</strong> — run and read test results</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="card" style="margin-bottom:14px;">
-        <div class="card-title">✨ What Makes It Different</div>
-        <div class="card-body">
-          <ul>
-            <li>Not just code completion — it <em>acts</em></li>
-            <li>Multi-step reasoning across many files</li>
-            <li>Self-correcting: reads errors and fixes them</li>
-            <li>Combines reading + editing + executing in one loop</li>
-            <li>Works with your existing project structure</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">🎯 Real Example — Our Framework</div>
-        <div class="card-body">
-          <em>"Add Dunkin' brand to the framework"</em><br/><br/>
-          Agent automatically:<br/>
-          ▸ Creates DunkinPage.java with correct @FindBy<br/>
-          ▸ Adds case DUNKIN: in BrandPageFactory<br/>
-          ▸ Creates DunkinTest.java extending AbstractBrandTest<br/>
-          ▸ Creates testng-dunkin.xml<br/>
-          ▸ Runs smoke tests to verify ✅
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 06 — HOW TO CREATE CUSTOM AGENTS
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="06">
-  <div class="slide-header">
-    <div class="icon icon-gold">🛠</div>
-    <h2>How to Create a Custom GitHub Copilot Agent</h2>
-  </div>
-  <div class="step-flow" style="margin-bottom:12px;">
+    <section data-slide-num="06">
+      <div class="slide-header">
+        <div class="icon icon-gold">🛠</div>
+        <h2>How to Create a Custom GitHub Copilot Agent</h2>
+      </div>
+      <div class="step-flow" style="margin-bottom:12px;">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-title">Open Agent Picker</div>
+          <div class="step-body">Press <strong>@</strong> or<br />click Agent button<br />→ "Configure Custom Agents…"
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-title">Create New Agent</div>
+          <div class="step-body">Click<br />"+ Create new custom agent…"<br />in the picker</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-title">Choose Location</div>
+          <div class="step-body"><strong>.github/agents/</strong> (default)<br />Workspace — shared via Git<br />with
+            all team members</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-title">Fill the Template</div>
+          <div class="step-body">Edit the .agent.md<br />file with YAML front-<br />matter + instructions</div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-title">Commit &amp; Share</div>
+          <div class="step-body">git commit &amp; push<br />All teammates get<br />the agent instantly</div>
+        </div>
+      </div>
+      <!-- Actual VS Code screenshots from the steps -->
+      <div style="display:flex; gap:10px; align-items:flex-start;">
+        <div style="flex:1;">
+          <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:5px;">Step 2 — Configure
+            Custom Agents dialog</div>
+          <img src="extracted-images/image2.png" alt="VS Code Configure Custom Agents dialog showing Inspire agent"
+            style="width:100%; border-radius:6px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.4);" />
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:5px;">Step 3 — Choose where to
+            save the agent file</div>
+          <img src="extracted-images/image3.png" alt="Agent file location picker showing .github/agents (default)"
+            style="width:100%; border-radius:6px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.4);" />
+          <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin:8px 0 5px;">Step 4 — The .agent.md
+            template file opens in VS Code</div>
+          <img src="extracted-images/image4.png" alt="Sample.agent.md template file open in VS Code editor"
+            style="width:100%; border-radius:6px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.4);" />
+        </div>
+      </div>
+    </section>
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-title">Open Agent Picker</div>
-      <div class="step-body">Press <strong>@</strong> or<br/>click Agent button<br/>→ "Configure Custom Agents…"</div>
+      <div class="step-body">Press <strong>@</strong> or<br />click Agent button<br />→ "Configure Custom Agents…"</div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-title">Create New Agent</div>
-      <div class="step-body">Click<br/>"+ Create new custom agent…"<br/>in the picker</div>
+      <div class="step-body">Click<br />"+ Create new custom agent…"<br />in the picker</div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-title">Choose Location</div>
-      <div class="step-body"><strong>.github/agents/</strong> (default)<br/>Workspace — shared via Git<br/>with all team members</div>
+      <div class="step-body"><strong>.github/agents/</strong> (default)<br />Workspace — shared via Git<br />with all
+        team members</div>
     </div>
     <div class="step">
       <div class="step-num">4</div>
       <div class="step-title">Fill the Template</div>
-      <div class="step-body">Edit the .agent.md<br/>file with YAML front-<br/>matter + instructions</div>
+      <div class="step-body">Edit the .agent.md<br />file with YAML front-<br />matter + instructions</div>
     </div>
     <div class="step">
       <div class="step-num">5</div>
       <div class="step-title">Commit &amp; Share</div>
-      <div class="step-body">git commit &amp; push<br/>All teammates get<br/>the agent instantly</div>
-    </div>
-  </div>
-  <!-- Actual VS Code screenshots from the steps -->
-  <div style="display:flex; gap:10px; align-items:flex-start;">
-    <div style="flex:1;">
-      <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:5px;">Step 2 — Configure Custom Agents dialog</div>
-      <img src="extracted-images/image2.png"
-           alt="VS Code Configure Custom Agents dialog showing Inspire agent"
-           style="width:100%; border-radius:6px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.4);" />
-    </div>
-    <div style="flex:1;">
-      <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:5px;">Step 3 — Choose where to save the agent file</div>
-      <img src="extracted-images/image3.png"
-           alt="Agent file location picker showing .github/agents (default)"
-           style="width:100%; border-radius:6px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.4);" />
-      <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin:8px 0 5px;">Step 4 — The .agent.md template file opens in VS Code</div>
-      <img src="extracted-images/image4.png"
-           alt="Sample.agent.md template file open in VS Code editor"
-           style="width:100%; border-radius:6px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.4);" />
-    </div>
-  </div>
-</section>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-title">Open Agent Picker</div>
-      <div class="step-body">Press <strong>@</strong> or<br/>click Agent button<br/>→ "Configure Custom Agents…"</div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-title">Create New Agent</div>
-      <div class="step-body">Click<br/>"+ Create new custom agent…"<br/>in the picker</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-title">Choose Location</div>
-      <div class="step-body"><strong>.github/agents/</strong> (default)<br/>Workspace — shared via Git<br/>with all team members</div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-title">Fill the Template</div>
-      <div class="step-body">Edit the .agent.md<br/>file with YAML front-<br/>matter + instructions</div>
-    </div>
-    <div class="step">
-      <div class="step-num">5</div>
-      <div class="step-title">Commit &amp; Share</div>
-      <div class="step-body">git commit &amp; push<br/>All teammates get<br/>the agent instantly</div>
+      <div class="step-body">git commit &amp; push<br />All teammates get<br />the agent instantly</div>
     </div>
   </div>
   <div class="card-grid cols-2">
     <div>
       <div style="font-size:0.4em; color:var(--gold); font-weight:700; margin-bottom:8px;">Agent File Template</div>
       <div class="code-block"><span class="kw">---</span>
-<span class="str">name</span>: My-Agent
-<span class="str">description</span>: What this agent does
-<span class="str">tools</span>: [<span class="num">'vscode'</span>, <span class="num">'execute'</span>, <span class="num">'edit'</span>, <span class="num">'search'</span>]
-<span class="kw">---</span>
+        <span class="str">name</span>: My-Agent
+        <span class="str">description</span>: What this agent does
+        <span class="str">tools</span>: [<span class="num">'vscode'</span>, <span class="num">'execute'</span>, <span
+          class="num">'edit'</span>, <span class="num">'search'</span>]
+        <span class="kw">---</span>
 
-<span class="cmt"># Agent instructions go here</span>
-Define behavior, rules, patterns,
-and domain-specific knowledge.</div>
+        <span class="cmt"># Agent instructions go here</span>
+        Define behavior, rules, patterns,
+        and domain-specific knowledge.
+      </div>
     </div>
     <div>
       <div style="font-size:0.4em; color:var(--gold); font-weight:700; margin-bottom:8px;">Agent Scope Options</div>
@@ -826,371 +987,384 @@ and domain-specific knowledge.</div>
       </div>
     </div>
   </div>
-</section>
+  </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 07 — COMPONENTS OF A CUSTOM AGENT
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="07">
-  <div class="slide-header">
-    <div class="icon icon-blue">📋</div>
-    <h2>Necessary Components of a Custom Agent File</h2>
-  </div>
-  <div class="card-grid cols-2">
-    <div>
-      <div class="card" style="margin-bottom:14px;">
-        <div class="card-title">📌 YAML Frontmatter (Required)</div>
-        <div class="card-body">
-          <ul>
-            <li><code>name</code> — agent identifier in picker</li>
-            <li><code>description</code> — shown in the agent list</li>
-            <li><code>tools</code> — explicit tool permissions list</li>
-            <li><code>argument-hint</code> — prompt hint for users</li>
-          </ul>
+  <section data-slide-num="07">
+    <div class="slide-header">
+      <div class="icon icon-blue">📋</div>
+      <h2>Necessary Components of a Custom Agent File</h2>
+    </div>
+    <div class="card-grid cols-2">
+      <div>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-title">📌 YAML Frontmatter (Required)</div>
+          <div class="card-body">
+            <ul>
+              <li><code>name</code> — agent identifier in picker</li>
+              <li><code>description</code> — shown in the agent list</li>
+              <li><code>tools</code> — explicit tool permissions list</li>
+              <li><code>argument-hint</code> — prompt hint for users</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-title">🔧 Tools Permissions</div>
+          <div class="card-body">
+            <ul>
+              <li>Declare exactly what the agent can do</li>
+              <li>Groups: vscode, execute, read, edit, search, web</li>
+              <li>Principle of least privilege — only what's needed</li>
+              <li>Users see permissions before running the agent</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚠️ Mandatory Rules Section</div>
+          <div class="card-body">
+            <ul>
+              <li>NEVER-break rules in ALL-CAPS headers</li>
+              <li>Project-specific constraints enforced on every call</li>
+              <li>Examples: "always use clean test", "never use text()"</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="card" style="margin-bottom:14px;">
-        <div class="card-title">🔧 Tools Permissions</div>
-        <div class="card-body">
-          <ul>
-            <li>Declare exactly what the agent can do</li>
-            <li>Groups: vscode, execute, read, edit, search, web</li>
-            <li>Principle of least privilege — only what's needed</li>
-            <li>Users see permissions before running the agent</li>
-          </ul>
+      <div>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-title">🏗 Project Structure</div>
+          <div class="card-body">
+            <ul>
+              <li>Full file tree with inline annotations</li>
+              <li>Tells agent what each file is responsible for</li>
+              <li>Prevents wrong-file edits and hallucinations</li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-title">⚠️ Mandatory Rules Section</div>
-        <div class="card-body">
-          <ul>
-            <li>NEVER-break rules in ALL-CAPS headers</li>
-            <li>Project-specific constraints enforced on every call</li>
-            <li>Examples: "always use clean test", "never use text()"</li>
-          </ul>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-title">🐛 Pitfalls &amp; Solutions</div>
+          <div class="card-body">
+            <ul>
+              <li>Documents every hard-won bug with root cause</li>
+              <li>Prevents team members re-discovering the same issues</li>
+              <li>P-01 to P-N numbered for easy reference</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🤖 Agent Behaviour Rules</div>
+          <div class="card-body">
+            <ul>
+              <li>Numbered constraints for every code generation action</li>
+              <li>Examples: XPath rules, screenshot path rules, brand extension rules</li>
+              <li>Ensures consistency across all developers</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    <div>
-      <div class="card" style="margin-bottom:14px;">
-        <div class="card-title">🏗 Project Structure</div>
-        <div class="card-body">
-          <ul>
-            <li>Full file tree with inline annotations</li>
-            <li>Tells agent what each file is responsible for</li>
-            <li>Prevents wrong-file edits and hallucinations</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card" style="margin-bottom:14px;">
-        <div class="card-title">🐛 Pitfalls &amp; Solutions</div>
-        <div class="card-body">
-          <ul>
-            <li>Documents every hard-won bug with root cause</li>
-            <li>Prevents team members re-discovering the same issues</li>
-            <li>P-01 to P-N numbered for easy reference</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">🤖 Agent Behaviour Rules</div>
-        <div class="card-body">
-          <ul>
-            <li>Numbered constraints for every code generation action</li>
-            <li>Examples: XPath rules, screenshot path rules, brand extension rules</li>
-            <li>Ensures consistency across all developers</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 08 — TOOLS IN THE INSPIRE AGENT
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="08">
-  <div class="slide-header">
-    <div class="icon icon-green">⚙️</div>
-    <h2>Tools in the Inspire Agent — What Each Enables</h2>
-  </div>
-  <div style="display:flex; gap:14px; align-items:flex-start;">
-    <div style="flex:1.4;">
-      <div class="card-grid cols-3" style="gap:10px;">
-        <div class="card">
-          <div class="card-title">🖥 vscode/*</div>
-          <div class="card-body">
-            <ul>
-              <li><code>installExtension</code> — auto-install Java Pack on clone</li>
-              <li><code>memory</code> — remember "clean already ran"</li>
-              <li><code>runCommand</code> — "Java: Clean Workspace"</li>
-              <li><code>askQuestions</code> — "Which brand to add?"</li>
-            </ul>
+  <section data-slide-num="08">
+    <div class="slide-header">
+      <div class="icon icon-green">⚙️</div>
+      <h2>Tools in the Inspire Agent — What Each Enables</h2>
+    </div>
+    <div style="display:flex; gap:14px; align-items:flex-start;">
+      <div style="flex:1.4;">
+        <div class="card-grid cols-3" style="gap:10px;">
+          <div class="card">
+            <div class="card-title">🖥 vscode/*</div>
+            <div class="card-body">
+              <ul>
+                <li><code>installExtension</code> — auto-install Java Pack on clone</li>
+                <li><code>memory</code> — remember "clean already ran"</li>
+                <li><code>runCommand</code> — "Java: Clean Workspace"</li>
+                <li><code>askQuestions</code> — "Which brand to add?"</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">⚡ execute/*</div>
+            <div class="card-body">
+              <ul>
+                <li><code>runInTerminal</code> — <code>.\mvnw.cmd clean test</code></li>
+                <li><code>runTests</code> — trigger ▶ button per test</li>
+                <li><code>testFailure</code> — read stack traces</li>
+                <li><code>getTerminalOutput</code> — parse PASSED/FAILED</li>
+                <li><code>killTerminal</code> — stop hung Maven builds</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">📖 read/*</div>
+            <div class="card-body">
+              <ul>
+                <li><code>readFile</code> — read any Java/XML/properties</li>
+                <li><code>problems</code> — see compile errors first</li>
+                <li><code>terminalLastCommand</code> — was clean already run?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">✏️ edit/*</div>
+            <div class="card-body">
+              <ul>
+                <li><code>createFile</code> — DunkinPage.java, DunkinTest.java</li>
+                <li><code>editFiles</code> — add case DUNKIN: to factory</li>
+                <li><code>createDirectory</code> — package directories</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">🔍 search/*</div>
+            <div class="card-body">
+              <ul>
+                <li><code>codebase</code> — "where is cookie handled?"</li>
+                <li><code>textSearch</code> — find all <code>text()</code> locators to fix</li>
+                <li><code>usages</code> — who calls <code>isVisibleAfterWait()</code>?</li>
+                <li><code>changes</code> — git diff since last run</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">🌐 web/* &amp; agent/*</div>
+            <div class="card-body">
+              <ul>
+                <li><code>web/fetch</code> — inspect live page DOM for new locators</li>
+                <li><code>browser/openBrowserPage</code> — open Extent report</li>
+                <li><code>agent/runSubagent</code> — delegate complex exploration without cluttering chat</li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-title">⚡ execute/*</div>
-          <div class="card-body">
-            <ul>
-              <li><code>runInTerminal</code> — <code>.\mvnw.cmd clean test</code></li>
-              <li><code>runTests</code> — trigger ▶ button per test</li>
-              <li><code>testFailure</code> — read stack traces</li>
-              <li><code>getTerminalOutput</code> — parse PASSED/FAILED</li>
-              <li><code>killTerminal</code> — stop hung Maven builds</li>
-            </ul>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">📖 read/*</div>
-          <div class="card-body">
-            <ul>
-              <li><code>readFile</code> — read any Java/XML/properties</li>
-              <li><code>problems</code> — see compile errors first</li>
-              <li><code>terminalLastCommand</code> — was clean already run?</li>
-            </ul>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">✏️ edit/*</div>
-          <div class="card-body">
-            <ul>
-              <li><code>createFile</code> — DunkinPage.java, DunkinTest.java</li>
-              <li><code>editFiles</code> — add case DUNKIN: to factory</li>
-              <li><code>createDirectory</code> — package directories</li>
-            </ul>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">🔍 search/*</div>
-          <div class="card-body">
-            <ul>
-              <li><code>codebase</code> — "where is cookie handled?"</li>
-              <li><code>textSearch</code> — find all <code>text()</code> locators to fix</li>
-              <li><code>usages</code> — who calls <code>isVisibleAfterWait()</code>?</li>
-              <li><code>changes</code> — git diff since last run</li>
-            </ul>
-          </div>
-        </div>
-    <div class="card">
-      <div class="card-title">🌐 web/* &amp; agent/*</div>
-      <div class="card-body">
-        <ul>
-          <li><code>web/fetch</code> — inspect live page DOM for new locators</li>
-          <li><code>browser/openBrowserPage</code> — open Extent report</li>
-          <li><code>agent/runSubagent</code> — delegate complex exploration without cluttering chat</li>
-        </ul>
+      </div>
+      <!-- Actual screenshot of the tools table from the conversation -->
+      <div style="flex:0.6; display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:6px;">Tools declared in the
+          agent YAML frontmatter</div>
+        <img src="extracted-images/image6.png" alt="Screenshot showing tools grouped by category in the Inspire agent"
+          style="width:100%; border-radius:8px; border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.5);" />
       </div>
     </div>
-  </div>
-    </div>
-    <!-- Actual screenshot of the tools table from the conversation -->
-    <div style="flex:0.6; display:flex; flex-direction:column; justify-content:center;">
-      <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:6px;">Tools declared in the agent YAML frontmatter</div>
-      <img src="extracted-images/image6.png"
-           alt="Screenshot showing tools grouped by category in the Inspire agent"
-           style="width:100%; border-radius:8px; border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.5);" />
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 09 — SECTIONS IN THE INSPIRE AGENT
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="09">
-  <div class="slide-header">
-    <div class="icon icon-gold">📑</div>
-    <h2>Key Sections in the Inspire Franchise Agent</h2>
-  </div>
-  <div style="display:flex; gap:16px; align-items:flex-start;">
-    <div style="flex:1.2;">
-      <table class="data-table">
-        <thead>
-          <tr><th>Section</th><th>What It Contains</th><th>Why It Matters</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>MANDATORY Rules ×3</strong></td>
-            <td><code>clean test</code>, cookie banner, 5 XPath rules</td>
-            <td class="win">Prevents the most common failures before they happen</td>
-          </tr>
-          <tr>
-            <td><strong>Project Structure</strong></td>
-            <td>Full file tree with inline ← annotations</td>
-            <td>Agent edits the right file, never guesses</td>
-          </tr>
-          <tr>
-            <td><strong>Brands Table</strong></td>
-            <td>7 brands with enum, URL slug, properties file</td>
-            <td>Correct names &amp; paths generated for all brands</td>
-          </tr>
-          <tr>
-            <td><strong>Test Case Conventions</strong></td>
-            <td>TC prefix map, naming pattern, valid groups</td>
-            <td>Consistent TC IDs without duplicating a registry</td>
-          </tr>
-          <tr>
-            <td><strong>Design Patterns &amp; SOLID</strong></td>
-            <td>9 patterns mapped to exact classes</td>
-            <td>New code follows the same architecture automatically</td>
-          </tr>
-          <tr>
-            <td><strong>Add New Brand (4 Steps)</strong></td>
-            <td>Copy-paste ready code for each step</td>
-            <td>New brand in &lt;5 minutes — zero existing file changes</td>
-          </tr>
-          <tr>
-            <td><strong>Pitfalls P-01 to P-10</strong></td>
-            <td>Root cause + fix for every hard-won bug</td>
-            <td>No developer rediscovers the same issue twice</td>
-          </tr>
-          <tr>
-            <td><strong>Agent Behaviour Rules</strong></td>
-            <td>10 numbered constraints for code generation</td>
-            <td>Same quality output from every developer, every time</td>
-          </tr>
-        </tbody>
-      </table>
+  <section data-slide-num="09">
+    <div class="slide-header">
+      <div class="icon icon-gold">📑</div>
+      <h2>Key Sections in the Inspire Franchise Agent</h2>
     </div>
-    <!-- Actual screenshot of the sections table from the conversation -->
-    <div style="flex:0.6; display:flex; flex-direction:column; justify-content:center;">
-      <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:6px;">The Inspire agent in the VS Code agent picker</div>
-      <img src="extracted-images/image5.png"
-           alt="Screenshot showing the Inspire agent sections and advantages table"
-           style="width:100%; border-radius:8px; border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.5);" />
+    <div style="display:flex; gap:16px; align-items:flex-start;">
+      <div style="flex:1.2;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>What It Contains</th>
+              <th>Why It Matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MANDATORY Rules ×3</strong></td>
+              <td><code>clean test</code>, cookie banner, 5 XPath rules</td>
+              <td class="win">Prevents the most common failures before they happen</td>
+            </tr>
+            <tr>
+              <td><strong>Project Structure</strong></td>
+              <td>Full file tree with inline ← annotations</td>
+              <td>Agent edits the right file, never guesses</td>
+            </tr>
+            <tr>
+              <td><strong>Brands Table</strong></td>
+              <td>7 brands with enum, URL slug, properties file</td>
+              <td>Correct names &amp; paths generated for all brands</td>
+            </tr>
+            <tr>
+              <td><strong>Test Case Conventions</strong></td>
+              <td>TC prefix map, naming pattern, valid groups</td>
+              <td>Consistent TC IDs without duplicating a registry</td>
+            </tr>
+            <tr>
+              <td><strong>Design Patterns &amp; SOLID</strong></td>
+              <td>9 patterns mapped to exact classes</td>
+              <td>New code follows the same architecture automatically</td>
+            </tr>
+            <tr>
+              <td><strong>Add New Brand (4 Steps)</strong></td>
+              <td>Copy-paste ready code for each step</td>
+              <td>New brand in &lt;5 minutes — zero existing file changes</td>
+            </tr>
+            <tr>
+              <td><strong>Pitfalls P-01 to P-10</strong></td>
+              <td>Root cause + fix for every hard-won bug</td>
+              <td>No developer rediscovers the same issue twice</td>
+            </tr>
+            <tr>
+              <td><strong>Agent Behaviour Rules</strong></td>
+              <td>10 numbered constraints for code generation</td>
+              <td>Same quality output from every developer, every time</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Actual screenshot of the sections table from the conversation -->
+      <div style="flex:0.6; display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-size:0.32em; color:var(--gold); font-weight:700; margin-bottom:6px;">The Inspire agent in the
+          VS Code agent picker</div>
+        <img src="extracted-images/image5.png" alt="Screenshot showing the Inspire agent sections and advantages table"
+          style="width:100%; border-radius:8px; border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.5);" />
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 10 — DEMO WALKTHROUGH
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="10">
-  <div class="slide-header">
-    <div class="icon icon-green">🎬</div>
-    <h2>Demo — Select Agent &amp; Add Baskin Robbins Brand</h2>
-  </div>
-  <div class="card-grid cols-2">
-    <div>
-      <div style="font-size:0.4em; font-weight:700; color:var(--gold); margin-bottom:10px;">Part 1 — Selecting the Custom Agent</div>
-      <div class="demo-step">
-        <div class="ds-num">1</div>
-        <div class="ds-content">
-          <div class="ds-title">Open Copilot Chat</div>
-          <div class="ds-body">Press <code>Ctrl+Shift+I</code> or click the Copilot icon in the sidebar</div>
-        </div>
-      </div>
-      <div class="demo-step">
-        <div class="ds-num">2</div>
-        <div class="ds-content">
-          <div class="ds-title">Click the Agent Picker (@)</div>
-          <div class="ds-body">Type <code>@</code> or click the "Agent" button at the bottom of the chat panel</div>
-        </div>
-      </div>
-      <div class="demo-step">
-        <div class="ds-num">3</div>
-        <div class="ds-content">
-          <div class="ds-title">Select the Inspire Agent</div>
-          <div class="ds-body">Choose <code>Inspire-Franchise-Selenium-Automation-Framework-Agent</code> from the dropdown — note the "Workspace" label</div>
-        </div>
-      </div>
-      <div class="demo-step">
-        <div class="ds-num">4</div>
-        <div class="ds-content">
-          <div class="ds-title">Verify Agent is Active</div>
-          <div class="ds-body">The agent name appears in the chat header. All framework rules are now pre-loaded.</div>
-        </div>
-      </div>
+  <section data-slide-num="10">
+    <div class="slide-header">
+      <div class="icon icon-green">🎬</div>
+      <h2>Demo — Select Agent &amp; Add Baskin Robbins Brand</h2>
     </div>
-    <div>
-      <div style="font-size:0.4em; font-weight:700; color:var(--gold); margin-bottom:10px;">Part 2 — Add Baskin Robbins Brand</div>
-      <div class="demo-step">
-        <div class="ds-num">5</div>
-        <div class="ds-content">
-          <div class="ds-title">Type the Request</div>
-          <div class="ds-body"><code>"Add Baskin Robbins brand to this framework"</code></div>
+    <div class="card-grid cols-2">
+      <div>
+        <div style="font-size:0.4em; font-weight:700; color:var(--gold); margin-bottom:10px;">Part 1 — Selecting the
+          Custom Agent</div>
+        <div class="demo-step">
+          <div class="ds-num">1</div>
+          <div class="ds-content">
+            <div class="ds-title">Open Copilot Chat</div>
+            <div class="ds-body">Press <code>Ctrl+Shift+I</code> or click the Copilot icon in the sidebar</div>
+          </div>
         </div>
-      </div>
-      <div class="demo-step">
-        <div class="ds-num">6</div>
-        <div class="ds-content">
-          <div class="ds-title">Agent Creates 4 Files Automatically</div>
-          <div class="ds-body">
-            ▸ <code>BaskinRobbinsPage.java</code> with correct @FindBy<br/>
-            ▸ <code>BrandPageFactory</code> case BASKIN_ROBBINS<br/>
-            ▸ <code>BaskinRobbinsTest.java</code> extending AbstractBrandTest<br/>
-            ▸ <code>testng-baskin-robbins.xml</code>
+        <div class="demo-step">
+          <div class="ds-num">2</div>
+          <div class="ds-content">
+            <div class="ds-title">Click the Agent Picker (@)</div>
+            <div class="ds-body">Type <code>@</code> or click the "Agent" button at the bottom of the chat panel</div>
+          </div>
+        </div>
+        <div class="demo-step">
+          <div class="ds-num">3</div>
+          <div class="ds-content">
+            <div class="ds-title">Select the Inspire Agent</div>
+            <div class="ds-body">Choose <code>Inspire-Franchise-Selenium-Automation-Framework-Agent</code> from the
+              dropdown — note the "Workspace" label</div>
+          </div>
+        </div>
+        <div class="demo-step">
+          <div class="ds-num">4</div>
+          <div class="ds-content">
+            <div class="ds-title">Verify Agent is Active</div>
+            <div class="ds-body">The agent name appears in the chat header. All framework rules are now pre-loaded.
+            </div>
           </div>
         </div>
       </div>
-      <div class="demo-step">
-        <div class="ds-num">7</div>
-        <div class="ds-content">
-          <div class="ds-title">Agent Runs Smoke Tests</div>
-          <div class="ds-body">Executes <code>.\mvnw.cmd clean test -P baskin-robbins -Dgroups=smoke</code> automatically and verifies all TC-B tests pass for the new brand</div>
+      <div>
+        <div style="font-size:0.4em; font-weight:700; color:var(--gold); margin-bottom:10px;">Part 2 — Add Baskin
+          Robbins Brand</div>
+        <div class="demo-step">
+          <div class="ds-num">5</div>
+          <div class="ds-content">
+            <div class="ds-title">Type the Request</div>
+            <div class="ds-body"><code>"Add Baskin Robbins brand to this framework"</code></div>
+          </div>
+        </div>
+        <div class="demo-step">
+          <div class="ds-num">6</div>
+          <div class="ds-content">
+            <div class="ds-title">Agent Creates 4 Files Automatically</div>
+            <div class="ds-body">
+              ▸ <code>BaskinRobbinsPage.java</code> with correct @FindBy<br />
+              ▸ <code>BrandPageFactory</code> case BASKIN_ROBBINS<br />
+              ▸ <code>BaskinRobbinsTest.java</code> extending AbstractBrandTest<br />
+              ▸ <code>testng-baskin-robbins.xml</code>
+            </div>
+          </div>
+        </div>
+        <div class="demo-step">
+          <div class="ds-num">7</div>
+          <div class="ds-content">
+            <div class="ds-title">Agent Runs Smoke Tests</div>
+            <div class="ds-body">Executes <code>.\mvnw.cmd clean test -P baskin-robbins -Dgroups=smoke</code>
+              automatically and verifies all TC-B tests pass for the new brand</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ══════════════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════════════════
      SLIDE 11 — KEY TAKEAWAYS
 ═══════════════════════════════════════════════════════════════════ -->
-<section data-slide-num="11">
-  <div class="slide-header">
-    <div class="icon icon-gold">🎯</div>
-    <h2>Key Takeaways</h2>
-  </div>
-  <div class="card-grid cols-3" style="margin-bottom:18px;">
-    <div class="card">
-      <div class="card-title">🏎 Speed</div>
-      <div class="card-body">
-        Adding a new brand that took a developer a full day now takes 5 minutes with the custom agent.
+  <section data-slide-num="11">
+    <div class="slide-header">
+      <div class="icon icon-gold">🎯</div>
+      <h2>Key Takeaways</h2>
+    </div>
+    <div class="card-grid cols-3" style="margin-bottom:18px;">
+      <div class="card">
+        <div class="card-title">🏎 Speed</div>
+        <div class="card-body">
+          Adding a new brand that took a developer a full day now takes 5 minutes with the custom agent.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🧱 Consistency</div>
+        <div class="card-body">
+          Every developer produces the same quality output — patterns, XPath rules, and pitfall fixes are always
+          applied.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📚 Knowledge Preservation</div>
+        <div class="card-body">
+          Every hard-won fix is permanently encoded. No one rediscovers the same bug twice.
+        </div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">🧱 Consistency</div>
-      <div class="card-body">
-        Every developer produces the same quality output — patterns, XPath rules, and pitfall fixes are always applied.
-      </div>
+    <div class="highlight-box">
+      <strong>The custom agent is not just a productivity tool — it is a living document of your team's collective
+        intelligence.</strong>
+      <br /><br />
+      The <code>.agent.md</code> file lives in <code>.github/agents/</code>, committed to Git — every team member who
+      clones the repo gets the same expert-level Copilot experience immediately.
     </div>
-    <div class="card">
-      <div class="card-title">📚 Knowledge Preservation</div>
-      <div class="card-body">
-        Every hard-won fix is permanently encoded. No one rediscovers the same bug twice.
-      </div>
+    <div class="tag-list" style="margin-top:18px;">
+      <span class="tag">Inspire-Franchise-Selenium-Automation-Framework-Agent</span>
+      <span class="tag green">.\mvnw.cmd clean test -P arbys</span>
+      <span class="tag gold">Zero existing files modified when adding a brand</span>
     </div>
-  </div>
-  <div class="highlight-box">
-    <strong>The custom agent is not just a productivity tool — it is a living document of your team's collective intelligence.</strong>
-    <br/><br/>
-    The <code>.agent.md</code> file lives in <code>.github/agents/</code>, committed to Git — every team member who clones the repo gets the same expert-level Copilot experience immediately.
-  </div>
-  <div class="tag-list" style="margin-top:18px;">
-    <span class="tag">Inspire-Franchise-Selenium-Automation-Framework-Agent</span>
-    <span class="tag green">.\mvnw.cmd clean test -P arbys</span>
-    <span class="tag gold">Zero existing files modified when adding a brand</span>
-  </div>
-</section>
+  </section>
 
-</div><!-- /slides -->
-</div><!-- /reveal -->
+  </div><!-- /slides -->
+  </div><!-- /reveal -->
 
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-<script>
-  Reveal.initialize({
-    hash: true,
-    slideNumber: true,
-    progress: true,
-    controls: true,
-    transition: 'slide',
-    transitionSpeed: 'fast',
-    backgroundTransition: 'fade',
-    width: 1280,
-    height: 720,
-    margin: 0.04,
-    plugins: []
-  });
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      progress: true,
+      controls: true,
+      transition: 'slide',
+      transitionSpeed: 'fast',
+      backgroundTransition: 'fade',
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      plugins: []
+    });
+  </script>
 </body>
+
 </html>
