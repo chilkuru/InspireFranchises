@@ -39,14 +39,16 @@ public class HomePage extends BasePage implements INavigable {
 
     // Hero section
     @FindBy(xpath = "//h1[contains(normalize-space(.), 'Anything is Possible')]"
-            + " | //h2[contains(normalize-space(.), 'Anything is Possible')]")   
+            + " | //h2[contains(normalize-space(.), 'Anything is Possible')]")
     private WebElement heroHeading;
 
-@FindBy(xpath = "//*[contains(normalize-space(.), 'Any brand. Any format. Any space.')]")  
+    @FindBy(xpath = "//*[contains(normalize-space(.), 'Any brand. Any format. Any space.')]")
     private WebElement heroSubHeading;
 
-    // Hero GET STARTED — DOM text is "Get Started" (CSS text-transform renders it as uppercase).
-    // Multiple nav copies exist with the same href; exclude them via ancestor::header
+    // Hero GET STARTED — DOM text is "Get Started" (CSS text-transform renders it
+    // as uppercase).
+    // Multiple nav copies exist with the same href; exclude them via
+    // ancestor::header
     // (catches nav copies even when <header> is 6+ levels up) and ancestor::nav.
     // Take [1] to get the hero button before the brands-section copy at [2].
     @FindBy(xpath = "(//a[normalize-space(.)='Get Started'"
@@ -88,9 +90,9 @@ public class HomePage extends BasePage implements INavigable {
 
     // Brand links on the page body — prefer the text "LEARN MORE" link for Arby's
     // (image-only logo anchors have zero size and are not directly clickable)
-@FindBy(xpath = "//a[normalize-space(.)='LEARN MORE' and contains(@href,'/arbys')]"
+    @FindBy(xpath = "//a[normalize-space(.)='LEARN MORE' and contains(@href,'/arbys')]"
             + " | //a[contains(@href,'/arbys') and not(ancestor::footer) and not(ancestor::header)]"
-            + "[.//img or normalize-space(.)]")  
+            + "[.//img or normalize-space(.)]")
     private WebElement arbysBodyLink;
 
     // ── Constructor ────────────────────────────────────────────────────────────
@@ -132,7 +134,8 @@ public class HomePage extends BasePage implements INavigable {
     public String clickHeroGetStartedAndGetUrl() {
         // Scroll to the hero button and resolve href before clicking.
         // Use JS click to bypass fixed-header interception (the content-area button
-        // is below the viewport fold and the fixed nav can intercept a coordinate click).
+        // is below the viewport fold and the fixed nav can intercept a coordinate
+        // click).
         // Fall back to driver.get(href) if click does not trigger navigation.
         WaitUtils.scrollIntoView(driver, heroGetStartedButton);
         String href = heroGetStartedButton.getAttribute("href");
