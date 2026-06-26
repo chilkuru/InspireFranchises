@@ -10,7 +10,9 @@ tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/memory, vsco
 ---
 
 ## Repository
-- **Location**: `C:\code\Inspire\InspireFranchises`
+- **GitHub**: https://github.com/chilkuru/InspireFranchises
+- **Local clone**: `C:\code\Inspire\InspireFranchises`
+- **Clone command**: `git clone https://github.com/chilkuru/InspireFranchises.git`
 - **Type**: Selenium UI Automation Framework
 - **Target Application**: https://www.franchising.inspirebrands.com
 - **Tech Stack**: Java 21, Maven 3.9.9 (via Wrapper), Selenium 4.21.0, TestNG 7.10.2, Page Factory, WebDriverManager 5.9.1, Extent Reports 5.1.2, Log4j2 2.23.1
@@ -450,7 +452,7 @@ Every `logStep()`, `logPass()`, and test failure automatically captures and atta
 
 **First-time run workflow:**
 ```powershell
-git clone <repo-url>
+git clone https://github.com/chilkuru/InspireFranchises.git
 cd InspireFranchises
 .\mvnw.cmd clean test -P arbys -Dgroups=smoke
 # Maven 3.9.9 downloads automatically, then all dependencies, then tests run
