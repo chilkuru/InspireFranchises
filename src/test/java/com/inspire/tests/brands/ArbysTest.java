@@ -33,7 +33,7 @@ public class ArbysTest extends AbstractBrandTest {
 
     /** Typed convenience accessor to avoid repeated casts in Arby's tests. */
     private ArbysPage arbysPage() {
-        return (ArbysPage) brandPage;
+        return (ArbysPage) brandPage();
     }
 
     // ── TC-A-01 ────────────────────────────────────────────────────────────────

@@ -5,6 +5,7 @@ import com.inspire.constants.AppConstants;
 import com.inspire.driver.DriverManager;
 import com.inspire.pages.brands.AbstractBrandPage;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 /**
@@ -23,8 +24,17 @@ import org.testng.annotations.BeforeMethod;
  */
 public abstract class AbstractBrandTest extends BaseTest {
 
-    /** The brand page object under test – provided by the concrete subclass. */
-    protected AbstractBrandPage brandPage;
+    /**
+     * Thread-local brand page – each parallel thread gets its own isolated instance.
+     * Prevents race conditions when TestNG runs @Test methods concurrently on the
+     * same class instance (parallel="methods").
+     */
+    private final ThreadLocal<AbstractBrandPage> brandPageLocal = new ThreadLocal<>();
+
+    /** Returns the brand page object for the currently executing thread. */
+    protected AbstractBrandPage brandPage() {
+        return brandPageLocal.get();
+    }
 
     // ── Template method ────────────────────────────────────────────────────────
 
@@ -38,8 +48,14 @@ public abstract class AbstractBrandTest extends BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void openBrandPage() {
-        brandPage = getBrandPage();
-        brandPage.open();
+        AbstractBrandPage page = getBrandPage();
+        page.open();
+        brandPageLocal.set(page);
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void cleanupBrandPage() {
+        brandPageLocal.remove();
     }
 
     // ── Common Brand Test Cases ────────────────────────────────────────────────
@@ -52,10 +68,10 @@ public abstract class AbstractBrandTest extends BaseTest {
         groups = {"smoke", "brand-common"}
     )
     public void TC_B_01_verifyBrandPageLoads() {
-        logStep("Verifying brand page URL for: " + brandPage.getBrandDisplayName());
+        logStep("Verifying brand page URL for: " + brandPage().getBrandDisplayName());
         Assert.assertTrue(
-            brandPage.isOnBrandPage(),
-            "URL should contain '" + brandPage.getBrandPageUrl()
+            brandPage().isOnBrandPage(),
+            "URL should contain '" + brandPage().getBrandPageUrl()
             + "' but was: " + DriverManager.getDriver().getCurrentUrl()
         );
         logPass("Brand page loaded at correct URL: " + DriverManager.getDriver().getCurrentUrl());
@@ -71,11 +87,11 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_02_verifyHeroHeadingDisplayed() {
         logStep("Checking hero heading visibility");
         Assert.assertTrue(
-            brandPage.getHeroHeadingText().contains(AppConstants.BRAND_HERO_HEADING_PREFIX),
+            brandPage().getHeroHeadingText().contains(AppConstants.BRAND_HERO_HEADING_PREFIX),
             "Hero heading should start with 'Franchise with' but was: "
-            + brandPage.getHeroHeadingText()
+            + brandPage().getHeroHeadingText()
         );
-        logPass("Hero heading displayed: '" + brandPage.getHeroHeadingText() + "'");
+        logPass("Hero heading displayed: '" + brandPage().getHeroHeadingText() + "'");
     }
 
     /**
@@ -88,7 +104,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_03_verifyGetStartedButtonDisplayed() {
         logStep("Checking GET STARTED button visibility");
         Assert.assertTrue(
-            brandPage.isGetStartedButtonDisplayed(),
+            brandPage().isGetStartedButtonDisplayed(),
             "GET STARTED button should be visible on the brand hero section"
         );
         logPass("GET STARTED button is displayed");
@@ -103,7 +119,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     )
     public void TC_B_04_verifyGetStartedNavigatesToForm() {
         logStep("Clicking GET STARTED button");
-        String url = brandPage.clickGetStartedAndGetUrl();
+        String url = brandPage().clickGetStartedAndGetUrl();
         logStep("Navigated to: " + url);
         Assert.assertTrue(
             url.contains(AppConstants.FRANCHISE_FORM_PATH),
@@ -121,12 +137,12 @@ public abstract class AbstractBrandTest extends BaseTest {
         groups = {"regression", "brand-common"}
     )
     public void TC_B_05_verifyWhyBrandSectionDisplayed() {
-        logStep("Checking 'Why " + brandPage.getBrandDisplayName() + "?' section");
+        logStep("Checking 'Why " + brandPage().getBrandDisplayName() + "?' section");
         Assert.assertTrue(
-            brandPage.isWhyBrandSectionDisplayed(),
-            "'Why " + brandPage.getBrandDisplayName() + "?' section should be visible"
+            brandPage().isWhyBrandSectionDisplayed(),
+            "'Why " + brandPage().getBrandDisplayName() + "?' section should be visible"
         );
-        logPass("'Why " + brandPage.getBrandDisplayName() + "?' section is displayed");
+        logPass("'Why " + brandPage().getBrandDisplayName() + "?' section is displayed");
     }
 
     /**
@@ -139,7 +155,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_06_verifyHelpSectionDisplayed() {
         logStep("Checking 'Here's how we help' section");
         Assert.assertTrue(
-            brandPage.isHelpSectionDisplayed(),
+            brandPage().isHelpSectionDisplayed(),
             "'Here's how we help' section should be visible"
         );
         logPass("'Here's how we help' section is displayed");
@@ -156,19 +172,19 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_07_verifySupportPillarsDisplayed() {
         logStep("Checking support pillar subsections");
         Assert.assertTrue(
-            brandPage.isTrainingSupportDisplayed(),
+            brandPage().isTrainingSupportDisplayed(),
             "Training & Support subsection should be visible"
         );
         logStep("Training & Support is visible");
 
         Assert.assertTrue(
-            brandPage.isMarketingPRDisplayed(),
+            brandPage().isMarketingPRDisplayed(),
             "Marketing & PR subsection should be visible"
         );
         logStep("Marketing & PR is visible");
 
         Assert.assertTrue(
-            brandPage.isTechInnovationDisplayed(),
+            brandPage().isTechInnovationDisplayed(),
             "Technology & Innovation subsection should be visible"
         );
         logPass("All three support pillars are displayed");
@@ -184,7 +200,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_08_verifyQualificationSectionDisplayed() {
         logStep("Checking qualification requirements section");
         Assert.assertTrue(
-            brandPage.isQualificationSectionDisplayed(),
+            brandPage().isQualificationSectionDisplayed(),
             "Qualification requirements section should be visible"
         );
         logPass("Qualification requirements section is displayed");
@@ -200,7 +216,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_09_verifyWhatNextSectionDisplayed() {
         logStep("Checking 'What's next?' section");
         Assert.assertTrue(
-            brandPage.isWhatNextSectionDisplayed(),
+            brandPage().isWhatNextSectionDisplayed(),
             "'What's next?' section should be visible"
         );
         logPass("'What's next?' section is displayed");
@@ -217,7 +233,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_10_verifyAllFiveStepsDisplayed() {
         logStep("Checking all five franchise process steps");
         Assert.assertTrue(
-            brandPage.areFranchiseStepsDisplayed(),
+            brandPage().areFranchiseStepsDisplayed(),
             "All five franchise process steps should be visible"
         );
         logPass("All five franchise process steps are displayed");
@@ -233,7 +249,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_11_verifyFooterDisplayed() {
         logStep("Checking footer visibility");
         Assert.assertTrue(
-            brandPage.isFooterDisplayed(),
+            brandPage().isFooterDisplayed(),
             "Footer should be visible on the brand page"
         );
         logPass("Footer is displayed");
@@ -249,7 +265,7 @@ public abstract class AbstractBrandTest extends BaseTest {
     public void TC_B_12_verifyOtherBrandsLinksDisplayed() {
         logStep("Checking cross-brand promotion links");
         Assert.assertTrue(
-            brandPage.isOtherBrandsLinksDisplayed(),
+            brandPage().isOtherBrandsLinksDisplayed(),
             "Cross-brand promotion links should be visible on the brand page"
         );
         logPass("Cross-brand promotion links are displayed");

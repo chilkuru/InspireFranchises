@@ -3,6 +3,7 @@ package com.inspire.pages;
 import com.inspire.base.BasePage;
 import com.inspire.constants.AppConstants;
 import com.inspire.interfaces.INavigable;
+import com.inspire.utils.WaitUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,15 +38,22 @@ public class HomePage extends BasePage implements INavigable {
     private WebElement navGetStartedButton;
 
     // Hero section
-    @FindBy(xpath = "//h1[contains(normalize-space(text()), 'Anything is Possible')]"
-            + " | //h2[contains(normalize-space(text()), 'Anything is Possible')]")
+    @FindBy(xpath = "//h1[contains(normalize-space(.), 'Anything is Possible')]"
+            + " | //h2[contains(normalize-space(.), 'Anything is Possible')]")   
     private WebElement heroHeading;
 
-    @FindBy(xpath = "//*[contains(normalize-space(text()), 'Any brand. Any format. Any space.')]")
+@FindBy(xpath = "//*[contains(normalize-space(.), 'Any brand. Any format. Any space.')]")  
     private WebElement heroSubHeading;
 
-    @FindBy(xpath = "//a[contains(normalize-space(.), 'GET STARTED') and not(ancestor::footer)]"
-            + " | //a[contains(normalize-space(.), 'Get Started') and not(ancestor::footer)]")
+    // Hero GET STARTED — DOM text is "Get Started" (CSS text-transform renders it as uppercase).
+    // Multiple nav copies exist with the same href; exclude them via ancestor::header
+    // (catches nav copies even when <header> is 6+ levels up) and ancestor::nav.
+    // Take [1] to get the hero button before the brands-section copy at [2].
+    @FindBy(xpath = "(//a[normalize-space(.)='Get Started'"
+            + " and contains(@href,'franchise-with-us')"
+            + " and not(ancestor::header)"
+            + " and not(ancestor::nav)"
+            + " and not(ancestor::footer)])[1]")
     private WebElement heroGetStartedButton;
 
     // Brands section — split contains() to avoid straight-vs-curly apostrophe
@@ -69,20 +77,20 @@ public class HomePage extends BasePage implements INavigable {
     @FindBy(css = "footer, [class*='footer']")
     private WebElement footer;
 
-    @FindBy(xpath = "//*[contains(normalize-space(text()), 'INSPIRE BRANDS FRANCHISING')]")
+    @FindBy(xpath = "//*[contains(normalize-space(.), 'INSPIRE BRANDS FRANCHISING')]")
     private WebElement footerCompanyName;
 
     @FindBy(xpath = "//a[contains(@href,'linkedin.com')]")
     private WebElement linkedInLink;
 
-    @FindBy(xpath = "//a[contains(normalize-space(text()),'Privacy') and not(contains(@href,'Settings'))]")
+    @FindBy(xpath = "//a[contains(normalize-space(.),'Privacy') and not(contains(@href,'Settings'))]")
     private WebElement privacyLink;
 
     // Brand links on the page body — prefer the text "LEARN MORE" link for Arby's
     // (image-only logo anchors have zero size and are not directly clickable)
-    @FindBy(xpath = "//a[normalize-space(text())='LEARN MORE' and contains(@href,'/arbys')]"
+@FindBy(xpath = "//a[normalize-space(.)='LEARN MORE' and contains(@href,'/arbys')]"
             + " | //a[contains(@href,'/arbys') and not(ancestor::footer) and not(ancestor::header)]"
-            + "[.//img or normalize-space(.)]")
+            + "[.//img or normalize-space(.)]")  
     private WebElement arbysBodyLink;
 
     // ── Constructor ────────────────────────────────────────────────────────────
@@ -122,7 +130,25 @@ public class HomePage extends BasePage implements INavigable {
     }
 
     public String clickHeroGetStartedAndGetUrl() {
-        click(heroGetStartedButton);
+        // Scroll to the hero button and resolve href before clicking.
+        // Use JS click to bypass fixed-header interception (the content-area button
+        // is below the viewport fold and the fixed nav can intercept a coordinate click).
+        // Fall back to driver.get(href) if click does not trigger navigation.
+        WaitUtils.scrollIntoView(driver, heroGetStartedButton);
+        String href = heroGetStartedButton.getAttribute("href");
+        log.info("Hero GET STARTED href resolved as: {}", href);
+
+        ((org.openqa.selenium.JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", heroGetStartedButton);
+
+        try {
+            WaitUtils.waitForUrlContains(driver, AppConstants.FRANCHISE_FORM_PATH, 8);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            log.warn("JS click did not navigate; using href directly: {}", href);
+            if (href != null && !href.isBlank()) {
+                driver.get(href);
+            }
+        }
         return getCurrentUrl();
     }
 

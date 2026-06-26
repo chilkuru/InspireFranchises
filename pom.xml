@@ -32,6 +32,11 @@
         <!-- defaults – overridden by Maven profiles or -D flags -->
         <active.brand>all</active.brand>
         <testng.suite.file>testng-suites/testng-all.xml</testng.suite.file>
+
+        <!-- Parallel execution defaults (safe: sequential) -->
+        <!-- Override via: -Dparallel=methods -DthreadCount=3 -->
+        <parallel>false</parallel>
+        <threadCount>1</threadCount>
     </properties>
 
     <!-- ─────────────────────────────── DEPENDENCIES ──────────────────────────── -->
@@ -120,6 +125,17 @@
                         <headless>${headless}</headless>
                         <browser>${browser}</browser>
                     </systemPropertyVariables>
+                    <!-- TestNG parallelism — driven by -Dparallel and -Dthread.count -->
+                    <properties>
+                        <property>
+                            <name>parallel</name>
+                            <value>${parallel}</value>
+                        </property>
+                        <property>
+                            <name>threadcount</name>
+                            <value>${threadCount}</value>
+                        </property>
+                    </properties>
                     <!-- Keep Surefire from swallowing test output -->
                     <useFile>false</useFile>
                 </configuration>

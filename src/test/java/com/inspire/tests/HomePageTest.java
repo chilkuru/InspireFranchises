@@ -6,6 +6,7 @@ import com.inspire.driver.DriverManager;
 import com.inspire.enums.Brand;
 import com.inspire.pages.HomePage;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -25,14 +26,26 @@ import org.testng.annotations.Test;
  */
 public class HomePageTest extends BaseTest {
 
-    private HomePage homePage;
+    /** Thread-local home page – each parallel thread gets its own isolated instance. */
+    private final ThreadLocal<HomePage> homePageLocal = new ThreadLocal<>();
+
+    /** Returns the home page object for the currently executing thread. */
+    private HomePage homePage() {
+        return homePageLocal.get();
+    }
 
     // ── Setup ──────────────────────────────────────────────────────────────────
 
     @BeforeMethod(alwaysRun = true)
     public void openHomePage() {
-        homePage = new HomePage(DriverManager.getDriver());
-        homePage.open();
+        HomePage page = new HomePage(DriverManager.getDriver());
+        page.open();
+        homePageLocal.set(page);
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void cleanupHomePage() {
+        homePageLocal.remove();
     }
 
     // ── TC-H-01 ────────────────────────────────────────────────────────────────
@@ -60,7 +73,7 @@ public class HomePageTest extends BaseTest {
     public void TC_H_02_verifyHeroHeadingDisplayed() {
         logStep("Checking hero heading visibility");
         Assert.assertTrue(
-            homePage.isHeroHeadingDisplayed(),
+            homePage().isHeroHeadingDisplayed(),
             "Hero heading 'Anything is Possible' should be visible on home page"
         );
         logPass("Hero heading is displayed");
@@ -74,7 +87,7 @@ public class HomePageTest extends BaseTest {
     )
     public void TC_H_03_verifyHeroHeadingText() {
         logStep("Reading hero heading text");
-        String headingText = homePage.getHeroHeadingText();
+        String headingText = homePage().getHeroHeadingText();
         logStep("Hero heading text: '" + headingText + "'");
         Assert.assertTrue(
             headingText.contains(AppConstants.HOME_HERO_HEADING),
@@ -93,7 +106,7 @@ public class HomePageTest extends BaseTest {
     public void TC_H_04_verifyHeroCTAButtonDisplayed() {
         logStep("Checking 'GET STARTED' button visibility");
         Assert.assertTrue(
-            homePage.isHeroGetStartedButtonDisplayed(),
+            homePage().isHeroGetStartedButtonDisplayed(),
             "'GET STARTED' button should be visible in hero section"
         );
         logPass("'GET STARTED' CTA button is displayed");
@@ -107,7 +120,7 @@ public class HomePageTest extends BaseTest {
     )
     public void TC_H_05_verifyGetStartedNavigatesToForm() {
         logStep("Clicking 'GET STARTED' button");
-        String resultUrl = homePage.clickHeroGetStartedAndGetUrl();
+        String resultUrl = homePage().clickHeroGetStartedAndGetUrl();
         logStep("Navigated to: " + resultUrl);
         Assert.assertTrue(
             resultUrl.contains(AppConstants.FRANCHISE_FORM_PATH),
@@ -126,7 +139,7 @@ public class HomePageTest extends BaseTest {
     public void TC_H_06_verifyBrandsSectionDisplayed() {
         logStep("Checking brands section heading visibility");
         Assert.assertTrue(
-            homePage.isBrandsSectionDisplayed(),
+            homePage().isBrandsSectionDisplayed(),
             "'Grow with Inspire's Iconic Brands' section should be visible"
         );
         logPass("Brands section is displayed");
@@ -141,7 +154,7 @@ public class HomePageTest extends BaseTest {
     public void TC_H_07_verifyOurBrandsDropdownContainsArbys() {
         logStep("Opening 'Our Brands' dropdown and checking for Arby's");
         Assert.assertTrue(
-            homePage.isBrandInDropdown(Brand.ARBYS.getDisplayName()),
+            homePage().isBrandInDropdown(Brand.ARBYS.getDisplayName()),
             "Arby's should be listed in the 'Our Brands' dropdown"
         );
         logPass("Arby's found in 'Our Brands' dropdown");
@@ -155,7 +168,7 @@ public class HomePageTest extends BaseTest {
     )
     public void TC_H_08_verifyArbysLinkNavigatesToArbysPage() {
         logStep("Clicking Arby's brand link on home page body");
-        String resultUrl = homePage.clickArbysBodyLink();
+        String resultUrl = homePage().clickArbysBodyLink();
         logStep("Navigated to: " + resultUrl);
         Assert.assertTrue(
             resultUrl.contains("/arbys"),
@@ -173,11 +186,11 @@ public class HomePageTest extends BaseTest {
     public void TC_H_09_verifyFooterDisplayed() {
         logStep("Checking footer visibility");
         Assert.assertTrue(
-            homePage.isFooterDisplayed(),
+            homePage().isFooterDisplayed(),
             "Footer should be visible on the home page"
         );
         Assert.assertTrue(
-            homePage.isFooterCompanyNameDisplayed(),
+            homePage().isFooterCompanyNameDisplayed(),
             "Footer should display 'INSPIRE BRANDS FRANCHISING'"
         );
         logPass("Footer is displayed with company name");
@@ -192,10 +205,10 @@ public class HomePageTest extends BaseTest {
     public void TC_H_10_verifyLinkedInLinkInFooter() {
         logStep("Checking LinkedIn link in footer");
         Assert.assertTrue(
-            homePage.isLinkedInLinkPresent(),
+            homePage().isLinkedInLinkPresent(),
             "LinkedIn link should be present in the footer"
         );
-        String href = homePage.getLinkedInHref();
+        String href = homePage().getLinkedInHref();
         logStep("LinkedIn href: " + href);
         Assert.assertTrue(
             href.contains(AppConstants.FOOTER_LINKEDIN_URL),
@@ -213,7 +226,7 @@ public class HomePageTest extends BaseTest {
     public void TC_H_11_verifyHowToFranchiseeSection() {
         logStep("Checking 'How do I become a franchisee?' section");
         Assert.assertTrue(
-            homePage.isHowToFranchiseeSectionDisplayed(),
+            homePage().isHowToFranchiseeSectionDisplayed(),
             "'How do I become a franchisee?' section should be visible"
         );
         logPass("'How do I become a franchisee?' section is displayed");
