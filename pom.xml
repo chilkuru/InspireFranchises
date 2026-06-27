@@ -158,14 +158,6 @@
     <profiles>
 
         <profile>
-            <id>baskin-robbins</id>
-            <properties>
-                <active.brand>baskin-robbins</active.brand>
-                <testng.suite.file>testng-suites/testng-baskin-robbins.xml</testng.suite.file>
-            </properties>
-        </profile>
-
-        <profile>
             <id>homepage</id>
             <properties>
                 <active.brand>all</active.brand>

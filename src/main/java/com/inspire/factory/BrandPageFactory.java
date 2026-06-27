@@ -3,7 +3,6 @@ package com.inspire.factory;
 import com.inspire.enums.Brand;
 import com.inspire.pages.brands.AbstractBrandPage;
 import com.inspire.pages.brands.ArbysPage;
-import com.inspire.pages.brands.BaskinRobbinsPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -38,9 +37,6 @@ public final class BrandPageFactory {
         switch (brand) {
             case ARBYS:
                 return new ArbysPage(driver);
-
-            case BASKIN_ROBBINS:
-                return new BaskinRobbinsPage(driver);
 
             /*
              * Future brands – uncomment and add the corresponding page class:
