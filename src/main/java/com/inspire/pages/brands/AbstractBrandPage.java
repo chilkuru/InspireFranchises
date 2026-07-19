@@ -4,6 +4,7 @@ import com.inspire.base.BasePage;
 import com.inspire.constants.AppConstants;
 import com.inspire.interfaces.IBrandPage;
 import com.inspire.utils.WaitUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -234,6 +235,35 @@ public abstract class AbstractBrandPage extends BasePage implements IBrandPage {
     public boolean isOtherBrandsLinksDisplayed() {
         scrollToBottom();
         return isVisibleAfterWait(otherBrandsHeading);
+    }
+
+    // ── Dynamic element finders (for config-driven XPaths) ─────────────────────
+
+    /**
+     * Finds any non-script/style element whose normalised text contains
+     * {@code text}. Use this instead of {@code @FindBy} when the search text
+     * comes from a properties-file value read at runtime.
+     *
+     * @param text substring to match (must not contain a single-quote)
+     */
+    protected WebElement findByContainsText(String text) {
+        return driver.findElement(By.xpath(
+                "//*[contains(normalize-space(.), '" + text + "')]"
+                        + "[not(self::script)][not(self::style)]"));
+    }
+
+    /**
+     * Finds an h1–h4 heading element whose normalised text contains {@code text}.
+     * Use this for format labels, section headings, etc. driven by config.
+     *
+     * @param text substring to match (must not contain a single-quote)
+     */
+    protected WebElement findByHeadingContainsText(String text) {
+        return driver.findElement(By.xpath(
+                "//h1[contains(normalize-space(.), '" + text + "')]"
+                        + " | //h2[contains(normalize-space(.), '" + text + "')]"
+                        + " | //h3[contains(normalize-space(.), '" + text + "')]"
+                        + " | //h4[contains(normalize-space(.), '" + text + "')]"));
     }
 
     // ── Shared helper ──────────────────────────────────────────────────────────

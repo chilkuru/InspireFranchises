@@ -1,5 +1,6 @@
 package com.inspire.pages.brands;
 
+import com.inspire.config.ConfigReader;
 import com.inspire.enums.Brand;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -24,71 +25,25 @@ public class ArbysPage extends AbstractBrandPage {
 
     // ── Arby's-specific locators ───────────────────────────────────────────────
 
-    // "Why Arby's?" heading — avoid straight-vs-curly apostrophe by splitting
+    // "Why Arby's?" heading — uses brand.why.heading from config
+    // (split on apostrophe to avoid straight-vs-curly mismatch in XPath)
     @FindBy(xpath = "(//h2[contains(normalize-space(.), 'Why') and contains(normalize-space(.), 'Arby')]"
             + " | //h3[contains(normalize-space(.), 'Why') and contains(normalize-space(.), 'Arby')])[1]")
     private WebElement whyArbysHeading;
 
-    // Awards — use normalize-space(.) to match text inside nested spans
-    @FindBy(xpath = "//*[contains(normalize-space(.), 'Entrepreneur')]"
-            + "[not(self::script)][not(self::style)]")
-    private WebElement entrepreneurAward;
-
-    @FindBy(xpath = "//*[contains(normalize-space(.), 'Franchise 500')]"
-            + "[not(self::script)][not(self::style)]")
-    private WebElement franchise500Award;
-
-    @FindBy(xpath = "//*[contains(normalize-space(.), 'Top Food')]"
-            + "[not(self::script)][not(self::style)]")
-    private WebElement topFoodFranchiseAward;
-
-    // "We Have The Meats" brand tagline
+    // "We Have The Meats" brand tagline (not in properties — Arby's-only constant)
     @FindBy(xpath = "//*[contains(normalize-space(.), 'We Have The Meats')]"
             + "[not(self::script)]")
     private WebElement weHaveTheMeatsText;
-
-    // Qualification requirements — use normalize-space(.) for nested span text
-    @FindBy(xpath = "//*[contains(normalize-space(.), '500,000')]"
-            + "[not(self::script)][not(self::style)]")
-    private WebElement liquidAssetsText;
-
-    @FindBy(xpath = "//*[contains(normalize-space(.), '1,000,000')]"
-            + "[not(self::script)][not(self::style)]")
-    private WebElement netWorthText;
-
-    // Format type labels — use contains() to handle nested span text
-    @FindBy(xpath = "//h1[contains(normalize-space(.), 'Free Standing')]"
-            + " | //h2[contains(normalize-space(.), 'Free Standing')]"
-            + " | //h3[contains(normalize-space(.), 'Free Standing')]"
-            + " | //h4[contains(normalize-space(.), 'Free Standing')]")
-    private WebElement freeStandingFormat;
-
-    @FindBy(xpath = "//h1[contains(normalize-space(.), 'Endcap')]"
-            + " | //h2[contains(normalize-space(.), 'Endcap')]"
-            + " | //h3[contains(normalize-space(.), 'Endcap')]"
-            + " | //h4[contains(normalize-space(.), 'Endcap')]")
-    private WebElement endcapFormat;
-
-    @FindBy(xpath = "//h1[contains(normalize-space(.), 'Small Format')]"
-            + " | //h2[contains(normalize-space(.), 'Small Format')]"
-            + " | //h3[contains(normalize-space(.), 'Small Format')]"
-            + " | //h4[contains(normalize-space(.), 'Small Format')]")
-    private WebElement smallFormat;
-
-    // "Anything is possible with Arby's" — avoid apostrophe in "Arby's"
-    @FindBy(xpath = "//*[contains(normalize-space(.), 'Anything is possible')"
-            + " and contains(normalize-space(.), 'Arby')]"
-            + "[not(self::script)]")
-    private WebElement anythingIsPossibleSection;
 
     // GET STARTED link – must include brand query param
     @FindBy(xpath = "//a[contains(@href, 'franchise-with-us') and contains(@href, 'Arby')]")
     private WebElement arbysGetStartedLink;
 
-    // "3,500 restaurants" factoid in the hero sub-description
-    @FindBy(xpath = "//*[contains(normalize-space(text()), '3,500')]"
-            + "[not(self::script)]")
-    private WebElement restaurantCountText;
+    // NOTE: awards, qualification figures, formats, factoid, and
+    // 'Anything is possible' section are resolved dynamically from
+    // ConfigReader so the XPath is driven by brands/arbys.properties
+    // rather than hardcoded strings.
 
     // ── Constructor ────────────────────────────────────────────────────────────
 
@@ -121,21 +76,24 @@ public class ArbysPage extends AbstractBrandPage {
      * @return {@code true} if the Entrepreneur award line is visible
      */
     public boolean isEntrepreneurAwardDisplayed() {
-        return isVisibleAfterWait(entrepreneurAward);
+        String award = ConfigReader.getInstance().get("brand.award.entrepreneur", "Entrepreneur");
+        return isVisibleAfterWait(findByContainsText(award));
     }
 
     /**
      * @return {@code true} if the Franchise 500 award line is visible
      */
     public boolean isFranchise500AwardDisplayed() {
-        return isVisibleAfterWait(franchise500Award);
+        String award = ConfigReader.getInstance().get("brand.award.franchise500", "Franchise 500");
+        return isVisibleAfterWait(findByContainsText(award));
     }
 
     /**
      * @return {@code true} if the Top Food Franchise award line is visible
      */
     public boolean isTopFoodFranchiseAwardDisplayed() {
-        return isVisibleAfterWait(topFoodFranchiseAward);
+        String award = ConfigReader.getInstance().get("brand.award.topfood", "Top Food");
+        return isVisibleAfterWait(findByContainsText(award));
     }
 
     /**
@@ -146,46 +104,56 @@ public class ArbysPage extends AbstractBrandPage {
     }
 
     /**
-     * @return {@code true} if the "$500,000 liquid assets" requirement is visible
+     * @return {@code true} if the liquid assets requirement is visible
      */
     public boolean isLiquidAssetsRequirementDisplayed() {
-        return isVisibleAfterWait(liquidAssetsText);
+        String amount = ConfigReader.getInstance().get("brand.liquid.assets", "500,000");
+        return isVisibleAfterWait(findByContainsText(amount));
     }
 
     /**
-     * @return {@code true} if the "$1,000,000 net worth" requirement is visible
+     * @return {@code true} if the net worth requirement is visible
      */
     public boolean isNetWorthRequirementDisplayed() {
-        return isVisibleAfterWait(netWorthText);
+        String amount = ConfigReader.getInstance().get("brand.net.worth", "1,000,000");
+        return isVisibleAfterWait(findByContainsText(amount));
     }
 
     /**
      * @return {@code true} if the "Free Standing" format card is visible
      */
     public boolean isFreeStandingFormatDisplayed() {
-        return isVisibleAfterWait(freeStandingFormat);
+        String label = ConfigReader.getInstance().get("brand.format.freestanding", "Free Standing");
+        return isVisibleAfterWait(findByHeadingContainsText(label));
     }
 
     /**
      * @return {@code true} if the "Endcap" format card is visible
      */
     public boolean isEndcapFormatDisplayed() {
-        return isVisibleAfterWait(endcapFormat);
+        String label = ConfigReader.getInstance().get("brand.format.endcap", "Endcap");
+        return isVisibleAfterWait(findByHeadingContainsText(label));
     }
 
     /**
      * @return {@code true} if the "Small Format" format card is visible
      */
     public boolean isSmallFormatDisplayed() {
-        return isVisibleAfterWait(smallFormat);
+        String label = ConfigReader.getInstance().get("brand.format.smallformat", "Small Format");
+        return isVisibleAfterWait(findByHeadingContainsText(label));
     }
 
     /**
-     * @return {@code true} if the "Anything is possible with Arby's" section is
-     *         visible
+     * @return {@code true} if the "Anything is possible with Arby's" section is visible
      */
     public boolean isAnythingIsPossibleSectionDisplayed() {
-        return isVisibleAfterWait(anythingIsPossibleSection);
+        // brand.section.anything.possible = "Anything is possible with Arby's"
+        // Split at the apostrophe (curly U+2019 or straight U+0027) to avoid
+        // XPath apostrophe escaping issues
+        String val = ConfigReader.getInstance().get(
+                "brand.section.anything.possible", "Anything is possible");
+        String safeText = val.split("['\u2019]")[0].trim(); // e.g. "Anything is possible with Arby"
+        return isVisibleAfterWait(findByContainsText(safeText));
     }
 
     /**
@@ -198,10 +166,10 @@ public class ArbysPage extends AbstractBrandPage {
     }
 
     /**
-     * @return {@code true} if the restaurant-count ("3,500 restaurants") text is
-     *         visible
+     * @return {@code true} if the restaurant-count factoid is visible
      */
     public boolean isRestaurantCountDisplayed() {
-        return isVisibleAfterWait(restaurantCountText);
+        String count = ConfigReader.getInstance().get("brand.restaurant.count", "3,500");
+        return isVisibleAfterWait(findByContainsText(count));
     }
 }
