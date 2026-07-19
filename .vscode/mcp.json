@@ -1,26 +1,13 @@
 {
-  "inputs": [
-    {
-      "id": "testlinkApiKey",
-      "type": "promptString",
-      "description": "TestLink API Key (admin → My Settings → API interface → Generate a new key)",
-      "password": true
-    }
-  ],
   "servers": {
     "testlink": {
       "type": "stdio",
       "command": "docker",
       "args": [
         "run", "--rm", "-i",
-        "-e", "TESTLINK_URL",
-        "-e", "TESTLINK_API_KEY",
+        "--env-file", "${workspaceFolder}/testlink/.env",
         "dogkeeper886/testlink-mcp:latest"
-      ],
-      "env": {
-        "TESTLINK_URL": "http://host.docker.internal:8080",
-        "TESTLINK_API_KEY": "${input:testlinkApiKey}"
-      }
+      ]
     }
   }
 }

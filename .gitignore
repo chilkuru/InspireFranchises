@@ -1,5 +1,8 @@
 target/
 test-output/
+
+# TestLink MCP — local secrets (each developer creates their own)
+testlink/.env
 *.class
 *.iml
 .idea/
