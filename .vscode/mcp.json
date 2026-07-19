@@ -2,12 +2,12 @@
   "servers": {
     "testlink": {
       "type": "stdio",
-      "command": "docker",
-      "args": [
-        "run", "--rm", "-i",
-        "--env-file", "${workspaceFolder}/testlink/.env",
-        "dogkeeper886/testlink-mcp:latest"
-      ]
+      "command": "node",
+      "args": ["${workspaceFolder}/testlink-mcp/index.js"],
+      "envFile": "${workspaceFolder}/testlink/.env",
+      "env": {
+        "TESTLINK_URL": "http://localhost:8080"
+      }
     }
   }
 }

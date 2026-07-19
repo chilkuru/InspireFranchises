@@ -3,6 +3,9 @@ test-output/
 
 # TestLink MCP — local secrets (each developer creates their own)
 testlink/.env
+
+# TestLink MCP server — installed dependencies (restore with `npm install`)
+testlink-mcp/node_modules/
 *.class
 *.iml
 .idea/

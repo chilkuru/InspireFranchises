@@ -1,0 +1,20 @@
+{
+  "name": "testlink-mcp-inspire",
+  "version": "1.0.0",
+  "description": "Self-contained TestLink MCP server (27 tools) for the Inspire Brands Franchising automation framework. All array schemas include `items` for VS Code Copilot strict JSON Schema validation.",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "testlink-mcp-inspire": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "xmlrpc": "^1.3.2"
+  }
+}
