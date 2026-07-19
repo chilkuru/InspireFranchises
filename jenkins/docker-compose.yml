@@ -8,16 +8,16 @@
 #   docker compose logs -f jenkins      # tail logs
 #
 # Access Jenkins:
-#   http://localhost:8080
+#   http://localhost:8090
 #
 # First-time setup:
-#   1. Browse to http://localhost:8080
+#   1. Browse to http://localhost:8090
 #   2. Login: admin / admin  (set via JENKINS_ADMIN_* env vars below)
 #   3. Install suggested plugins when prompted
 #   4. Create a Pipeline job pointing to this repo's Jenkinsfile
 #
-# Note: TestLink runs separately on port 8083 (testlink/docker-compose.yml).
-# Both can run simultaneously — no port conflicts.
+# Note: TestLink runs separately on port 8080 (testlink/docker-compose.yml).
+# Jenkins runs on port 8090 — no port conflicts.
 # =============================================================================
 
 services:
@@ -28,7 +28,7 @@ services:
     container_name: jenkins
     restart: unless-stopped
     ports:
-      - "8080:8080"      # Jenkins UI
+      - "8090:8080"      # Jenkins UI  → http://localhost:8090
       - "50000:50000"    # Jenkins agent port (JNLP)
     volumes:
       # Persist all Jenkins configuration, jobs, builds, and plugin data
