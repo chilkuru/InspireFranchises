@@ -10,16 +10,13 @@
   "servers": {
     "testlink": {
       "type": "stdio",
-      "command": "cmd",
+      "command": "docker",
       "args": [
-        "/c",
-        "if not exist \"%TESTLINK_MCP_DIR%\\node_modules\" npm install --prefix \"%TESTLINK_MCP_DIR%\" --silent && node \"%TESTLINK_MCP_DIR%\\index.js\""
-      ],
-      "env": {
-        "TESTLINK_URL": "http://localhost:8080",
-        "TESTLINK_API_KEY": "${input:testlinkApiKey}",
-        "TESTLINK_MCP_DIR": "${workspaceFolder}\\testlink-mcp"
-      }
+        "run", "--rm", "-i",
+        "-e", "TESTLINK_URL=http://host.docker.internal:8080",
+        "-e", "TESTLINK_API_KEY=${input:testlinkApiKey}",
+        "dogkeeper886/testlink-mcp:latest"
+      ]
     }
   }
 }
