@@ -219,12 +219,30 @@ Run a specific group: `.\mvnw.cmd clean test -P arbys -Dgroups=smoke`
 
 ---
 
-## How to Add a New Brand (4 Steps — Zero Existing Files Modified)
+## How to Add a New Brand (5 Steps — Zero Existing Files Modified)
 
 ### Step 1 — Check enum (already present for all 7 brands)
 `Brand.java` already has `BASKIN_ROBBINS`, `DUNKIN`, `SONIC`, etc. No change needed.
 
-### Step 2 — Create the page class
+### Step 2 — Create the brand properties file
+`ConfigReader` loads a brand overlay from `src/test/resources/brands/<url-slug>.properties` at runtime.
+The `AbstractBrandTest` TC-B-* common tests drive their XPath assertions from these values — without this file, `ConfigReader` returns `null` for every brand-specific key and all 12 inherited tests fail.
+
+```properties
+# src/test/resources/brands/dunkin.properties
+brand.page.url=/dunkin
+brand.display.name=Dunkin'
+brand.hero.heading=Franchise with Dunkin'
+brand.why.heading=Why Dunkin'?
+brand.get.started.param=Dunkin
+```
+
+> **Key rules:**
+> - `brand.page.url` must match the URL slug exactly (no trailing slash).
+> - `brand.display.name` is what appears in nav menus and page headings — must match the live site text character-for-character (watch for curly apostrophes U+2019).
+> - `brand.get.started.param` is the URL fragment/query param used to identify the brand's GET STARTED destination.
+
+### Step 3 — Create the page class
 ```java
 // src/main/java/com/inspire/pages/brands/DunkinPage.java
 package com.inspire.pages.brands;
@@ -248,14 +266,14 @@ public class DunkinPage extends AbstractBrandPage {
 }
 ```
 
-### Step 3 — Register in the factory (one line)
+### Step 4 — Register in the factory (one line)
 ```java
 // BrandPageFactory.java — add inside the switch:
 case DUNKIN:
     return new DunkinPage(driver);
 ```
 
-### Step 4 — Create the test class
+### Step 5 — Create the test class
 ```java
 // src/test/java/com/inspire/tests/brands/DunkinTest.java
 public class DunkinTest extends AbstractBrandTest {
