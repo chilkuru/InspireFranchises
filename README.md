@@ -337,38 +337,54 @@ in TestLink without any manual copy-paste.
 
 | File | Purpose |
 |---|---|
-| `testlink/docker-compose.yml` | Defines two services: **testlink_app** (PHP/Apache) and **testlink_db** (MariaDB 10.11). Volumes persist data across restarts. |
-| `testlink/Dockerfile` | Builds the TestLink image: PHP 7.4 + Apache, all required PHP extensions (`gd`, `mysqli`, `pdo_mysql`, `mbstring`, `ldap`, etc.), and TestLink 1.9.20 source downloaded from GitHub. |
+| `testlink/Dockerfile` | Builds the TestLink image: **PHP 7.4 + Apache**, all required PHP extensions (`gd`, `mysqli`, `pdo_mysql`, `mbstring`, `ldap`, etc.), and TestLink 1.9.20 source downloaded from GitHub at build time. |
+| `testlink/docker-compose.yml` | Orchestrates two services — **testlink_app** (the PHP/Apache container) and **testlink_db** (MariaDB 10.11). Handles port mapping, Docker networking, named volumes, and startup ordering (app waits for DB healthcheck). |
+| `testlink/initdb/seed.sql` | MariaDB dump of the **"Inspire Brands Franchising" (IBF)** project. MariaDB auto-executes any `.sql` file placed in `/docker-entrypoint-initdb.d/` on **first start** (when the volume is empty). This means the IBF project, test plans, and test cases are available immediately — no manual setup needed. |
 
-### Starting TestLink
+### Zero-Setup for Anyone Who Clones
 
 ```bash
-# First run — builds the image (takes ~2 min)
-cd testlink
-docker compose up -d --build
+git clone https://github.com/chilkuru/InspireFranchises.git
+cd InspireFranchises/testlink
 
-# Subsequent starts
+# First run: builds the PHP/Apache image and seeds the database (~2 min)
+docker compose up -d --build
+```
+
+That's it. When the containers start:
+
+1. MariaDB initialises its volume and detects `seed.sql` in `initdb/` → **auto-imports** the IBF project data.
+2. TestLink starts, connects to the pre-seeded DB, and is ready to use.
+3. Open **http://localhost:8080** and log in with `admin` / `admin`.
+
+> **Note:** The seed only runs when the database volume is **empty** (i.e. first ever start, or after `docker compose down -v`).  
+> If you already have a `testlink_db_data` volume from a previous run, destroy it first:
+> ```bash
+> docker compose down -v   # removes volumes — data will be re-seeded from seed.sql
+> docker compose up -d --build
+> ```
+
+### Subsequent Starts / Stop / Teardown
+
+```bash
+# Start (image already built, data already in volumes — instant)
 docker compose up -d
 
-# Stop (data is preserved in volumes)
+# Stop — containers removed but volumes kept; data survives
 docker compose down
 
-# Full teardown including all data
+# Full teardown — removes containers AND volumes; next start re-seeds from seed.sql
 docker compose down -v
 ```
 
-TestLink UI: **http://localhost:8080**  
-Admin credentials: `admin` / `admin`
+### TestLink Project: Inspire Brands Franchising (IBF)
 
-### TestLink Project
+The seed pre-loads the following test plan structure, mirroring this framework's test cases:
 
-The **Inspire Brands Franchising** (`IBF`) project is pre-configured with the
-following test plan structure mirroring this framework's test cases:
-
-| Test Plan | Mapped Test Cases |
-|---|---|
-| Home Page Regression | TC-H-01 … TC-H-11 |
-| Arby's Brand Tests | TC-B-01 … TC-B-12, TC-A-01 … TC-A-11 |
+| Test Plan | Mapped Test Cases | Groups |
+|---|---|---|
+| Home Page Regression | TC-H-01 … TC-H-11 | `smoke`, `regression` |
+| Arby's Brand Tests | TC-B-01 … TC-B-12, TC-A-01 … TC-A-11 | `smoke`, `regression`, `arbys` |
 
 ### Jenkins Integration (TestLink Plugin)
 
