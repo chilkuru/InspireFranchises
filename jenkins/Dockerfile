@@ -31,5 +31,20 @@ RUN google-chrome --version
 # Switch back to the unprivileged jenkins user
 USER jenkins
 
-# Disable the Jenkins setup wizard (admin user is created via environment vars)
+# Pre-install required plugins at image build time.
+# This is the correct Jenkins-in-Docker pattern: bake plugins into the image
+# so they are available on first start without hitting the update center at runtime.
+#
+# Plugins installed:
+#   workflow-aggregator  — full Pipeline suite (Declarative + Scripted)
+#   git                  — Git SCM support for Pipeline from SCM
+#   junit                — JUnit XML test result publishing
+#   pipeline-stage-view  — Pipeline stage visualization in the UI
+RUN jenkins-plugin-cli --plugins \
+    workflow-aggregator \
+    git \
+    junit \
+    pipeline-stage-view
+
+# Disable the Jenkins setup wizard
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
