@@ -304,11 +304,9 @@ Add to `testng-suites/testng-all.xml`:
 Create `testng-suites/testng-dunkin.xml` following the `testng-arbys.xml` pattern.
 Add to `pom.xml` profiles following the `arbys` profile pattern.
 
-### Step 6 — MANDATORY: Register the brand in TestLink (via MCP)
+### Step 6 — Register the brand in TestLink (via MCP)
 
-> **⚠️ This step is NOT optional.** Every brand onboarding is incomplete until TestLink is updated. The agent must execute this step automatically — do NOT wait to be asked.
-
-The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java code is in place, immediately create the TestLink structure so every TC is traceable and executable from TestLink.
+The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java code is in place, use Copilot chat to create the TestLink structure so every TC is traceable and executable from TestLink.
 
 **Prompt Copilot with:**
 > "Onboard Dunkin' brand in TestLink: create a nested test suite under Brand Pages, add test cases for TC-D-01 to TC-D-XX (read them from DunkinTest.java and AbstractBrandTest.java), create a test plan 'Dunkin' Brand Page Tests', a build 'Build-\<today\>', and assign all TCs to the plan."
@@ -515,10 +513,9 @@ cd InspireFranchises
 3. **Always split apostrophes** in XPath — "Arby's" → `contains(., 'Arby')`.
 4. **Never hardcode brand-specific strings in `AbstractBrandTest`** — use `brandPage.getBrandDisplayName()`.
 5. **For all brand validations (common + brand-specific), use brand properties/config as the source of truth** (via `ConfigReader` and brand-page getters) whenever expected values are brand-dependent; do not hardcode brand-specific expected strings.
-6. **New brand onboarding is NEVER complete without Step 6** — always execute TestLink registration (create suite, TCs, test plan, build, assign TCs) immediately after the Java code is in place. Do NOT wait to be asked.
-7. **New brand = 4 files only**: `*Page.java`, `BrandPageFactory` case, `*Test.java`, `testng-*brand*.xml`. No other changes.
-8. **Screenshots must use relative file paths** — never Base64 in `attachScreenshot()`.
-9. **Test report is at** `test-output/extent-reports/<timestamp>/report.html` — always direct users there.
-10. **`@BeforeMethod` order**: `BaseTest.setUpMethod()` runs before `AbstractBrandTest.openBrandPage()` — TestNG guarantees parent `@BeforeMethod` runs first.
-11. **`isVisibleAfterWait(element)`** is the only safe visibility check — never call `element.isDisplayed()` directly in page objects.
-12. **When debugging failures**, always check the Extent report screenshot first — it captures the browser state at the exact moment of failure.
+6. **New brand = 4 files only**: `*Page.java`, `BrandPageFactory` case, `*Test.java`, `testng-*brand*.xml`. No other changes.
+7. **Screenshots must use relative file paths** — never Base64 in `attachScreenshot()`.
+8. **Test report is at** `test-output/extent-reports/<timestamp>/report.html` — always direct users there.
+9. **`@BeforeMethod` order**: `BaseTest.setUpMethod()` runs before `AbstractBrandTest.openBrandPage()` — TestNG guarantees parent `@BeforeMethod` runs first.
+10. **`isVisibleAfterWait(element)`** is the only safe visibility check — never call `element.isDisplayed()` directly in page objects.
+11. **When debugging failures**, always check the Extent report screenshot first — it captures the browser state at the exact moment of failure.
