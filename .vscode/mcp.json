@@ -13,10 +13,14 @@
       "command": "docker",
       "args": [
         "run", "--rm", "-i",
-        "-e", "TESTLINK_URL=http://host.docker.internal:8080",
-        "-e", "TESTLINK_API_KEY=${input:testlinkApiKey}",
+        "-e", "TESTLINK_URL",
+        "-e", "TESTLINK_API_KEY",
         "dogkeeper886/testlink-mcp:latest"
-      ]
+      ],
+      "env": {
+        "TESTLINK_URL": "http://host.docker.internal:8080",
+        "TESTLINK_API_KEY": "${input:testlinkApiKey}"
+      }
     }
   }
 }
