@@ -1,0 +1,52 @@
+# =============================================================================
+# Jenkins Docker Compose — Inspire Brands Franchising Automation
+#
+# Usage:
+#   docker compose up -d --build        # first run (builds the image)
+#   docker compose up -d                # subsequent runs
+#   docker compose down                 # stop
+#   docker compose logs -f jenkins      # tail logs
+#
+# Access Jenkins:
+#   http://localhost:8080
+#
+# First-time setup:
+#   1. Browse to http://localhost:8080
+#   2. Login: admin / admin  (set via JENKINS_ADMIN_* env vars below)
+#   3. Install suggested plugins when prompted
+#   4. Create a Pipeline job pointing to this repo's Jenkinsfile
+#
+# Note: TestLink runs separately on port 8083 (testlink/docker-compose.yml).
+# Both can run simultaneously — no port conflicts.
+# =============================================================================
+
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"      # Jenkins UI
+      - "50000:50000"    # Jenkins agent port (JNLP)
+    volumes:
+      # Persist all Jenkins configuration, jobs, builds, and plugin data
+      - jenkins_home:/var/jenkins_home
+      # Share the host Docker socket so Jenkins can run Docker commands if needed
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Skip the initial setup wizard; use the credentials below
+      JAVA_OPTS: >-
+        -Djenkins.install.runSetupWizard=false
+        -Xmx1g
+      # Pre-configure an admin user (change password before exposing externally)
+      JENKINS_ADMIN_ID: admin
+      JENKINS_ADMIN_PASSWORD: admin
+    # Ensure the jenkins user can write to the Docker socket
+    group_add:
+      - "999"   # docker group GID on most Linux hosts (adjust if needed)
+
+volumes:
+  jenkins_home:
+    name: inspire_jenkins_home
