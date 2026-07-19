@@ -219,7 +219,7 @@ Run a specific group: `.\mvnw.cmd clean test -P arbys -Dgroups=smoke`
 
 ---
 
-## How to Add a New Brand (5 Steps — Zero Existing Files Modified)
+## How to Add a New Brand (6 Steps — Zero Existing Files Modified)
 
 ### Step 1 — Check enum (already present for all 7 brands)
 `Brand.java` already has `BASKIN_ROBBINS`, `DUNKIN`, `SONIC`, etc. No change needed.
@@ -298,9 +298,31 @@ Add to `testng-suites/testng-all.xml`:
 Create `testng-suites/testng-dunkin.xml` following the `testng-arbys.xml` pattern.
 Add to `pom.xml` profiles following the `arbys` profile pattern.
 
----
+### Step 6 — Register the brand in TestLink (via MCP)
 
-## Maven Execution Commands
+The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java code is in place, use Copilot chat to create the TestLink structure so every TC is traceable and executable from TestLink.
+
+**Prompt Copilot with:**
+> "Onboard Dunkin' brand in TestLink: create a nested test suite under Brand Pages, add test cases for TC-D-01 to TC-D-XX (read them from DunkinTest.java and AbstractBrandTest.java), create a test plan 'Dunkin' Brand Page Tests', a build 'Build-\<today\>', and assign all TCs to the plan."
+
+**What the agent will do automatically (no manual steps):**
+1. `create_test_suite` — `Brand Pages > Dunkin'` (nested under the existing Brand Pages suite, ID 3)
+2. `create_test_case` × N — one per `@Test` method in `DunkinTest.java` + the 12 inherited from `AbstractBrandTest.java`, with steps and expected results
+3. `create_test_plan` — `Dunkin' Brand Page Tests`
+4. `create_build` — `Build-<date>`
+5. `add_test_case_to_test_plan` × N — wires every TC to the plan
+
+**TestLink structure conventions to maintain:**
+| What | Convention |
+|------|-----------|
+| Suite parent | Always nest brand suites under **Brand Pages** (suite ID 3) |
+| TC naming | `TC-<PREFIX>-NN  <description>` matching the Java method description attribute |
+| Execution type | `2` (automated) for all Selenium-driven TCs |
+| Status | `7` (Final) — only Draft (`1`) if the TC is incomplete/placeholder |
+| Build name | `Build-YYYY-MM-DD` |
+| Test plan name | `<Brand Display Name> Brand Page Tests` |
+
+> **Prerequisites:** Docker must be running (`docker compose up -d` in `testlink/`) before issuing TestLink prompts. Verify with `docker ps --filter name=testlink`.
 
 ```powershell
 # Prerequisites: JDK 21, Chrome browser, internet access (first run downloads Maven)
