@@ -3,18 +3,22 @@
     {
       "id": "testlinkApiKey",
       "type": "promptString",
-      "description": "TestLink API Key (admin → My Settings → API interface)",
+      "description": "TestLink API Key (admin → My Settings → API interface → Generate a new key)",
       "password": true
     }
   ],
   "servers": {
     "testlink": {
       "type": "stdio",
-      "command": "node",
-      "args": ["${workspaceFolder}/testlink-mcp/index.js"],
+      "command": "cmd",
+      "args": [
+        "/c",
+        "if not exist \"%TESTLINK_MCP_DIR%\\node_modules\" npm install --prefix \"%TESTLINK_MCP_DIR%\" --silent && node \"%TESTLINK_MCP_DIR%\\index.js\""
+      ],
       "env": {
         "TESTLINK_URL": "http://localhost:8080",
-        "TESTLINK_API_KEY": "${input:testlinkApiKey}"
+        "TESTLINK_API_KEY": "${input:testlinkApiKey}",
+        "TESTLINK_MCP_DIR": "${workspaceFolder}\\testlink-mcp"
       }
     }
   }

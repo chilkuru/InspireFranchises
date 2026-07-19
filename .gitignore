@@ -1,7 +1,7 @@
 target/
 test-output/
 
-# MCP server — installed packages (restored via npm install)
+# MCP server — node_modules are gitignored but auto-installed on first MCP start (see .vscode/mcp.json)
 testlink-mcp/node_modules/
 *.class
 *.iml
