@@ -15,7 +15,8 @@ A production-grade, modular Selenium 4 + TestNG automation framework for
 6. [Running Tests](#running-tests)
 7. [Adding a New Brand](#adding-a-new-brand)
 8. [Reports](#reports)
-9. [Configuration Reference](#configuration-reference)
+9. [TestLink & Jenkins Orchestration](#testlink--jenkins-orchestration)
+10. [Configuration Reference](#configuration-reference)
 
 ---
 
@@ -309,6 +310,85 @@ The HTML report includes:
 - Step-level log entries
 - Inline failure screenshots
 - System info (browser, OS, active brand, Java version)
+
+---
+
+## TestLink & Jenkins Orchestration
+
+This project ships a ready-to-run **TestLink** instance (test management) wired for
+**Jenkins** integration so that every Maven build automatically updates test results
+in TestLink without any manual copy-paste.
+
+### Architecture
+
+```
+┌─────────────────────┐      XML results      ┌────────────────────────┐
+│  Jenkins Pipeline   │ ─────────────────────▶ │  TestLink 1.9.20       │
+│  (mvn test)         │   (TestLink Plugin)    │  http://localhost:8080 │
+│                     │ ◀───────────────────── │                        │
+│  surefire-reports/  │   pass/fail status     │  Project: IBF          │
+│  testng-results.xml │                        │  Test Plans / Builds   │
+└─────────────────────┘                        └────────────────────────┘
+                                                          │
+                                               MariaDB 10.11 (Docker)
+```
+
+### Docker Stack (`testlink/`)
+
+| File | Purpose |
+|---|---|
+| `testlink/docker-compose.yml` | Defines two services: **testlink_app** (PHP/Apache) and **testlink_db** (MariaDB 10.11). Volumes persist data across restarts. |
+| `testlink/Dockerfile` | Builds the TestLink image: PHP 7.4 + Apache, all required PHP extensions (`gd`, `mysqli`, `pdo_mysql`, `mbstring`, `ldap`, etc.), and TestLink 1.9.20 source downloaded from GitHub. |
+
+### Starting TestLink
+
+```bash
+# First run — builds the image (takes ~2 min)
+cd testlink
+docker compose up -d --build
+
+# Subsequent starts
+docker compose up -d
+
+# Stop (data is preserved in volumes)
+docker compose down
+
+# Full teardown including all data
+docker compose down -v
+```
+
+TestLink UI: **http://localhost:8080**  
+Admin credentials: `admin` / `admin`
+
+### TestLink Project
+
+The **Inspire Brands Franchising** (`IBF`) project is pre-configured with the
+following test plan structure mirroring this framework's test cases:
+
+| Test Plan | Mapped Test Cases |
+|---|---|
+| Home Page Regression | TC-H-01 … TC-H-11 |
+| Arby's Brand Tests | TC-B-01 … TC-B-12, TC-A-01 … TC-A-11 |
+
+### Jenkins Integration (TestLink Plugin)
+
+1. **Install** the [TestLink Plugin](https://plugins.jenkins.io/testlink/) in Jenkins.
+2. **Configure** the TestLink server in *Manage Jenkins → TestLink*:
+   - URL: `http://localhost:8080`
+   - API Key: generated in *TestLink → My Settings → API interface*
+3. **Add a build step** in your Jenkins job — *Invoke TestLink* — and set:
+   - Test Project Name: `Inspire Brands Franchising`
+   - Test Plan Name: *(your plan)*
+   - Test Build Name: `${BUILD_NUMBER}`
+   - Key custom field: `TC_ID` (maps TestNG method names to TestLink TC IDs)
+4. **Add a post-build action** — *TestLink Results* — pointing at:
+   ```
+   target/surefire-reports/testng-results.xml
+   ```
+
+After every `mvn test` run, Jenkins pushes the TestNG XML results to TestLink,
+automatically marking each test case **Passed**, **Failed**, or **Blocked** in the
+corresponding Test Build.
 
 ---
 

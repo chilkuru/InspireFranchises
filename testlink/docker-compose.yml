@@ -1,0 +1,71 @@
+# ────────────────────────────────────────────────────────────────────────────
+# TestLink 1.9.20 + MariaDB  (demo stack for E2E orchestration with Jenkins)
+#
+# Usage:
+#   cd testlink
+#   docker compose up -d --build       ← first run (builds the PHP/Apache image)
+#   docker compose up -d               ← subsequent starts
+#
+# TestLink UI  → http://localhost:8080
+#   Complete the web installer on first visit:
+#     DB host     : mariadb
+#     DB name     : testlink
+#     DB user     : testlink
+#     DB password : testlink_pass
+#
+# Stop:
+#   docker compose down
+#
+# Full teardown (removes volumes/data):
+#   docker compose down -v
+# ────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Database ─────────────────────────────────────────────────────────────────
+  mariadb:
+    image: mariadb:10.11
+    container_name: testlink_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root_secret
+      MARIADB_DATABASE: testlink
+      MARIADB_USER: testlink
+      MARIADB_PASSWORD: testlink_pass
+    volumes:
+      - testlink_db_data:/var/lib/mysql
+      # Seed script: runs automatically on first start (when volume is empty).
+      # Pre-loads the "Inspire Brands Franchising" TestLink project so anyone
+      # who clones the repo gets a ready-to-use TestLink instance.
+      - ./initdb/seed.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── TestLink application (built from local Dockerfile) ────────────────────────
+  testlink:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: testlink_app
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    ports:
+      - "8080:80"   # TestLink HTTP
+    environment:
+      # Pre-seed DB connection so the installer can auto-configure
+      TESTLINK_DB_HOST: mariadb
+      TESTLINK_DB_NAME: testlink
+      TESTLINK_DB_USER: testlink
+      TESTLINK_DB_PASS: testlink_pass
+    volumes:
+      - testlink_app_data:/var/testlink   # persists uploads + logs
+
+volumes:
+  testlink_db_data:
+  testlink_app_data:
