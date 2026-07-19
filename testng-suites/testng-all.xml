@@ -21,36 +21,37 @@
     formats      — restaurant format tests
 -->
 <suite name="Inspire Brands – Full Regression Suite"
-       verbose="2"
-       parallel="false">
+    verbose="2"
+    parallel="false">
 
     <!-- Register Extent listener for supplemental suite-level reporting -->
     <listeners>
-        <listener class-name="com.inspire.listeners.ExtentReportListener"/>
+        <listener class-name="com.inspire.listeners.ExtentReportListener" />
     </listeners>
 
     <!-- ── Home Page Tests ──────────────────────────────────────────────────── -->
     <test name="Home Page Tests" preserve-order="true">
         <classes>
-            <class name="com.inspire.tests.HomePageTest"/>
+            <class name="com.inspire.tests.HomePageTest" />
         </classes>
     </test>
 
     <!-- ── Arby's Page Tests (common + brand-specific) ─────────────────────── -->
     <test name="Arby's Brand Page Tests" preserve-order="true">
         <classes>
-            <class name="com.inspire.tests.brands.ArbysTest"/>
+            <class name="com.inspire.tests.brands.ArbysTest" />
         </classes>
     </test>
 
-    <!--
-      ── Future brand test classes – uncomment as brands are implemented ───────
-
+    <!-- ── Baskin-Robbins Page Tests (common + brand-specific) ───────────────── -->
     <test name="Baskin-Robbins Brand Page Tests" preserve-order="true">
         <classes>
             <class name="com.inspire.tests.brands.BaskinRobbinsTest"/>
         </classes>
     </test>
+
+    <!--
+      ── Future brand test classes – uncomment as brands are implemented ───────
 
     <test name="Buffalo Wild Wings Brand Page Tests" preserve-order="true">
         <classes>
