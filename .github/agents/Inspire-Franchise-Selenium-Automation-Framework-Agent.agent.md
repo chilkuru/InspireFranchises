@@ -49,6 +49,10 @@ If cookie-related failures appear:
 
 ## MANDATORY — XPath Rules (Hard-Won Rules — Never Break These)
 
+These rules apply when XPath is required for element location. For common TC-B validations,
+expected values must come from brand properties/config first; do not make common assertions
+depend on hardcoded XPath text unless no config-backed option exists.
+
 ### Rule 1: Always use `normalize-space(.)` — NEVER `normalize-space(text())`
 ```xml
 ✅ //*[contains(normalize-space(.), 'Training')]
@@ -226,7 +230,9 @@ Run a specific group: `.\mvnw.cmd clean test -P arbys -Dgroups=smoke`
 
 ### Step 2 — Create the brand properties file
 `ConfigReader` loads a brand overlay from `src/test/resources/brands/<url-slug>.properties` at runtime.
-The `AbstractBrandTest` TC-B-* common tests drive their XPath assertions from these values — without this file, `ConfigReader` returns `null` for every brand-specific key and all 12 inherited tests fail.
+The `AbstractBrandTest` TC-B-* common tests must use these properties values as the validation source of truth (URL paths, display names, headings, expected tokens). XPath should be used only as a locator strategy where necessary. Without this file, `ConfigReader` returns `null` for brand-specific keys and inherited common validations fail.
+
+Scope clarification: this properties-first rule is not limited to `AbstractBrandTest`. It also applies to brand-specific tests/pages such as `ArbysTest` / `ArbysPage` and any future brand implementations whenever expected text/values vary by brand. Keep hardcoded assertions only for truly global constants shared by all brands.
 
 ```properties
 # src/test/resources/brands/dunkin.properties
@@ -505,10 +511,11 @@ cd InspireFranchises
 1. **Always generate `.\mvnw.cmd clean test`** — never suggest bare `mvn` or `.\mvnw.cmd test` without `clean`.
 2. **Always use `normalize-space(.)`** in any XPath you generate — never `normalize-space(text())`.
 3. **Always split apostrophes** in XPath — "Arby's" → `contains(., 'Arby')`.
-4. **Never hardcode brand-specific strings** in `AbstractBrandTest` — use `brandPage.getBrandDisplayName()`.
-5. **New brand = 4 files only**: `*Page.java`, `BrandPageFactory` case, `*Test.java`, `testng-*brand*.xml`. No other changes.
-6. **Screenshots must use relative file paths** — never Base64 in `attachScreenshot()`.
-7. **Test report is at** `test-output/extent-reports/<timestamp>/report.html` — always direct users there.
-8. **`@BeforeMethod` order**: `BaseTest.setUpMethod()` runs before `AbstractBrandTest.openBrandPage()` — TestNG guarantees parent `@BeforeMethod` runs first.
-9. **`isVisibleAfterWait(element)`** is the only safe visibility check — never call `element.isDisplayed()` directly in page objects.
-10. **When debugging failures**, always check the Extent report screenshot first — it captures the browser state at the exact moment of failure.
+4. **Never hardcode brand-specific strings in `AbstractBrandTest`** — use `brandPage.getBrandDisplayName()`.
+5. **For all brand validations (common + brand-specific), use brand properties/config as the source of truth** (via `ConfigReader` and brand-page getters) whenever expected values are brand-dependent; do not hardcode brand-specific expected strings.
+6. **New brand = 4 files only**: `*Page.java`, `BrandPageFactory` case, `*Test.java`, `testng-*brand*.xml`. No other changes.
+7. **Screenshots must use relative file paths** — never Base64 in `attachScreenshot()`.
+8. **Test report is at** `test-output/extent-reports/<timestamp>/report.html` — always direct users there.
+9. **`@BeforeMethod` order**: `BaseTest.setUpMethod()` runs before `AbstractBrandTest.openBrandPage()` — TestNG guarantees parent `@BeforeMethod` runs first.
+10. **`isVisibleAfterWait(element)`** is the only safe visibility check — never call `element.isDisplayed()` directly in page objects.
+11. **When debugging failures**, always check the Extent report screenshot first — it captures the browser state at the exact moment of failure.
