@@ -1,0 +1,21 @@
+{
+  "inputs": [
+    {
+      "id": "testlinkApiKey",
+      "type": "promptString",
+      "description": "TestLink API Key (admin → My Settings → API interface)",
+      "password": true
+    }
+  ],
+  "servers": {
+    "testlink": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/testlink-mcp/index.js"],
+      "env": {
+        "TESTLINK_URL": "http://localhost:8080",
+        "TESTLINK_API_KEY": "${input:testlinkApiKey}"
+      }
+    }
+  }
+}

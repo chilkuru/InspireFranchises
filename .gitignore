@@ -1,5 +1,8 @@
 target/
 test-output/
+
+# MCP server — installed packages (restored via npm install)
+testlink-mcp/node_modules/
 *.class
 *.iml
 .idea/
