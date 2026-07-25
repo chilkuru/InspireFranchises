@@ -31,12 +31,14 @@ RUN google-chrome --version
 # Fix Git "dubious ownership" error for the mounted local workspace.
 # The volume /workspace/InspireFranchises is owned by the Windows host user,
 # but Jenkins runs as UID 1000. Git 2.35+ refuses to access mismatched-owner
-# directories. Registering it as a safe.directory at system level (/etc/gitconfig)
-# makes this permanent across container restarts and rebuilds.
+# directories. Register at both system level (/etc/gitconfig) and user level
+# (~jenkins/.gitconfig) so the Jenkins git plugin picks it up in all contexts.
 RUN git config --system --add safe.directory /workspace/InspireFranchises
 
-# Switch back to the unprivileged jenkins user
+# Switch back to the unprivileged jenkins user and register at user level too
 USER jenkins
+RUN git config --global --add safe.directory /workspace/InspireFranchises \
+    && git config --global --add safe.directory /workspace/InspireFranchises/.git
 
 # Pre-install required plugins at image build time.
 # This is the correct Jenkins-in-Docker pattern: bake plugins into the image
