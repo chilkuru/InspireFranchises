@@ -193,53 +193,54 @@ InspireFranchises/
 
 ## Prerequisites
 
-| Requirement | Minimum Version |
-|---|---|
-| Java JDK | 11 |
-| Maven | 3.8 |
-| Chrome | Latest stable |
-| Internet access | Required (tests hit the live site) |
-
-WebDriverManager auto-downloads the matching ChromeDriver — no manual driver setup needed.
+| Requirement | Version | Notes |
+|---|---|---|
+| Java JDK | **21** | Set `JAVA_HOME`; Temurin 21 recommended — https://adoptium.net |
+| Chrome | Latest stable | WebDriverManager auto-downloads the matching ChromeDriver |
+| Maven | Not required | The Maven Wrapper (`mvnw.cmd`) downloads Maven 3.9.9 automatically on first run |
+| Internet access | — | Tests hit the live site `franchising.inspirebrands.com` |
+| Docker Desktop | Latest | Required only for TestLink + Jenkins — not needed for local test runs |
 
 ---
 
 ## Running Tests
 
+> **Windows**: Always use `.\mvnw.cmd` — Maven is not required to be installed.  
+> **Linux/macOS**: Use `./mvnw`. The wrapper downloads Maven 3.9.9 automatically on first run.  
+> Always include `clean` — stale compiled classes cause `Cannot instantiate class` errors.
+
 ### Run all tests (default)
-```bash
-mvn test
-# or explicitly:
-mvn test -P all-brands
+```powershell
+.\mvnw.cmd clean test -P all-brands
 ```
 
 ### Run only Arby's tests
-```bash
-mvn test -P arbys
+```powershell
+.\mvnw.cmd clean test -P arbys
 ```
 
 ### Run headless (CI-friendly)
-```bash
-mvn test -P arbys -Dheadless=true
+```powershell
+.\mvnw.cmd clean test -P arbys -Dheadless=true
 ```
 
 ### Run a specific TestNG group
-```bash
-mvn test -P arbys -Dgroups=smoke
-mvn test -P all-brands -Dgroups=regression
+```powershell
+.\mvnw.cmd clean test -P arbys -Dgroups=smoke
+.\mvnw.cmd clean test -P all-brands -Dgroups=regression
 ```
 
 ### Run with a different browser
-```bash
-mvn test -P arbys -Dbrowser=firefox
-mvn test -P arbys -Dbrowser=edge
+```powershell
+.\mvnw.cmd clean test -P arbys -Dbrowser=firefox
+.\mvnw.cmd clean test -P arbys -Dbrowser=edge
 ```
 
 ### Override config at runtime
-```bash
-mvn test -Dactive.brand=arbys \
-         -Dtestng.suite.file=testng-suites/testng-arbys.xml \
-         -Dbrowser=chrome \
+```powershell
+.\mvnw.cmd clean test -Dactive.brand=arbys `
+         -Dtestng.suite.file=testng-suites/testng-arbys.xml `
+         -Dbrowser=chrome `
          -Dheadless=true
 ```
 
@@ -315,96 +316,184 @@ The HTML report includes:
 
 ## TestLink & Jenkins Orchestration
 
-This project ships a ready-to-run **TestLink** instance (test management) wired for
-**Jenkins** integration so that every Maven build automatically updates test results
-in TestLink without any manual copy-paste.
+This project ships a ready-to-run **TestLink** instance (test management) and a
+**Jenkins** CI pipeline — both Docker-based. Anyone who clones the repo can reproduce
+the exact same environment and data state with a few commands.
 
-### Architecture
+### What you get out of the box
 
-```
-┌─────────────────────┐      XML results      ┌────────────────────────┐
-│  Jenkins Pipeline   │ ─────────────────────▶ │  TestLink 1.9.20       │
-│  (mvn test)         │   (TestLink Plugin)    │  http://localhost:8080 │
-│                     │ ◀───────────────────── │                        │
-│  surefire-reports/  │   pass/fail status     │  Project: IBF          │
-│  testng-results.xml │                        │  Test Plans / Builds   │
-└─────────────────────┘                        └────────────────────────┘
-                                                          │
-                                               MariaDB 10.11 (Docker)
-```
+| Tool | URL | Credentials | What's pre-loaded |
+|------|-----|-------------|-------------------|
+| **TestLink 1.9.20** | http://localhost:8080 | `admin` / `admin` | Full IBF project — all test suites, test cases, test plans, builds, and execution history |
+| **Jenkins LTS** | http://localhost:8090 | *(no login required)* | Two pre-registered pipelines: `Inspire-Arbys-Smoke` and `Inspire-Arbys-Full-Regression` |
 
-### Docker Stack (`testlink/`)
+---
 
-| File | Purpose |
-|---|---|
-| `testlink/Dockerfile` | Builds the TestLink image: **PHP 7.4 + Apache**, all required PHP extensions (`gd`, `mysqli`, `pdo_mysql`, `mbstring`, `ldap`, etc.), and TestLink 1.9.20 source downloaded from GitHub at build time. |
-| `testlink/docker-compose.yml` | Orchestrates two services — **testlink_app** (the PHP/Apache container) and **testlink_db** (MariaDB 10.11). Handles port mapping, Docker networking, named volumes, and startup ordering (app waits for DB healthcheck). |
-| `testlink/initdb/seed.sql` | MariaDB dump of the **"Inspire Brands Franchising" (IBF)** project. MariaDB auto-executes any `.sql` file placed in `/docker-entrypoint-initdb.d/` on **first start** (when the volume is empty). This means the IBF project, test plans, and test cases are available immediately — no manual setup needed. |
+### Prerequisites
 
-### Zero-Setup for Anyone Who Clones
+| Requirement | Notes |
+|-------------|-------|
+| **Docker Desktop** | Ensure it is running before any `docker compose` command |
+| **JDK 21** | Required only if running tests locally (not needed for Jenkins-only setup) |
+| **Chrome** | Required only for local test runs |
+| **Git** | To clone the repo |
 
-```bash
-git clone https://github.com/chilkuru/InspireFranchises.git
-cd InspireFranchises/testlink
+---
 
-# First run: builds the PHP/Apache image and seeds the database (~2 min)
-docker compose up -d --build
+### Step 1 — Start TestLink
+
+TestLink runs on **port 8080**.
+
+```powershell
+cd testlink
+docker compose up -d --build   # first run: builds image + seeds DB (~2–3 min)
 ```
 
-That's it. When the containers start:
+On first start, MariaDB auto-imports `testlink/initdb/seed.sql` which contains:
+- The **"Inspire Brands Franchising" (IBF)** project
+- All **test suites**: Home Page Tests, Brand Pages → Arby's, Common Brand Tests
+- All **test cases**: TC-H-01..11, TC-B-01..12, TC-A-01..11 (with steps and expected results)
+- All **test plans**: Home Page Tests, Arby's Brand Page Tests
+- All **builds** and **execution results** (pass/fail history)
 
-1. MariaDB initialises its volume and detects `seed.sql` in `initdb/` → **auto-imports** the IBF project data.
-2. TestLink starts, connects to the pre-seeded DB, and is ready to use.
-3. Open **http://localhost:8080** and log in with `admin` / `admin`.
+Open http://localhost:8080 → login `admin` / `admin` — everything is ready, no manual setup.
 
-> **Note:** The seed only runs when the database volume is **empty** (i.e. first ever start, or after `docker compose down -v`).  
-> If you already have a `testlink_db_data` volume from a previous run, destroy it first:
-> ```bash
-> docker compose down -v   # removes volumes — data will be re-seeded from seed.sql
+> **Seed only runs once** (when the DB volume is empty). If you have a leftover volume
+> from a previous run and want a clean re-seed:
+> ```powershell
+> docker compose down -v   # destroys volumes → next start re-imports seed.sql
 > docker compose up -d --build
 > ```
 
-### Subsequent Starts / Stop / Teardown
+#### TestLink day-to-day commands
 
-```bash
-# Start (image already built, data already in volumes — instant)
-docker compose up -d
-
-# Stop — containers removed but volumes kept; data survives
-docker compose down
-
-# Full teardown — removes containers AND volumes; next start re-seeds from seed.sql
-docker compose down -v
+```powershell
+docker compose up -d      # start (data in volumes survives restarts)
+docker compose down       # stop (volumes kept — data preserved)
+docker compose down -v    # full teardown — volumes deleted, re-seeds on next start
 ```
 
-### TestLink Project: Inspire Brands Franchising (IBF)
+---
 
-The seed pre-loads the following test plan structure, mirroring this framework's test cases:
+### Step 2 — Start Jenkins
 
-| Test Plan | Mapped Test Cases | Groups |
-|---|---|---|
-| Home Page Regression | TC-H-01 … TC-H-11 | `smoke`, `regression` |
-| Arby's Brand Tests | TC-B-01 … TC-B-12, TC-A-01 … TC-A-11 | `smoke`, `regression`, `arbys` |
+Jenkins runs on **port 8090** (no conflict with TestLink on 8080).
 
-### Jenkins Integration (TestLink Plugin)
+```powershell
+cd jenkins
+docker compose up -d --build   # first run: builds image with JDK 21 + Chrome + plugins (~3–5 min)
+```
 
-1. **Install** the [TestLink Plugin](https://plugins.jenkins.io/testlink/) in Jenkins.
-2. **Configure** the TestLink server in *Manage Jenkins → TestLink*:
-   - URL: `http://localhost:8080`
-   - API Key: generated in *TestLink → My Settings → API interface*
-3. **Add a build step** in your Jenkins job — *Invoke TestLink* — and set:
-   - Test Project Name: `Inspire Brands Franchising`
-   - Test Plan Name: *(your plan)*
-   - Test Build Name: `${BUILD_NUMBER}`
-   - Key custom field: `TC_ID` (maps TestNG method names to TestLink TC IDs)
-4. **Add a post-build action** — *TestLink Results* — pointing at:
-   ```
-   target/surefire-reports/testng-results.xml
-   ```
+The custom image pre-installs all required plugins at build time
+(`workflow-aggregator`, `git`, `junit`, `pipeline-stage-view`) — no update-center
+prompts, no wizard.
 
-After every `mvn test` run, Jenkins pushes the TestNG XML results to TestLink,
-automatically marking each test case **Passed**, **Failed**, or **Blocked** in the
-corresponding Test Build.
+```powershell
+docker compose up -d      # subsequent starts (image cached — instant)
+docker compose down       # stop
+```
+
+#### Step 2a — Register the pipeline jobs
+
+The job XML configs are committed to `jenkins/`. Run the PowerShell script once
+to create both pipelines in Jenkins:
+
+```powershell
+cd jenkins
+.\create-jenkins-jobs.ps1
+```
+
+This registers:
+
+| Job | Default parameters | Suite |
+|-----|--------------------|-------|
+| `Inspire-Arbys-Smoke` | `BRAND_PROFILE=arbys`, `TEST_GROUPS=smoke`, `HEADLESS=true` | Smoke only |
+| `Inspire-Arbys-Full-Regression` | `BRAND_PROFILE=arbys`, `TEST_GROUPS=all`, `HEADLESS=true` | Full suite |
+
+Both jobs read the `Jenkinsfile` from the **local mounted workspace**
+(`file:///workspace/InspireFranchises`) — no GitHub token needed.
+
+Open http://localhost:8090 → both pipelines appear ready to run.
+
+---
+
+### Step 3 — Trigger a build
+
+Click **Build with Parameters** in the Jenkins UI, or use PowerShell:
+
+```powershell
+$session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+$crumb   = Invoke-RestMethod -Uri "http://localhost:8090/crumbIssuer/api/json" -WebSession $session
+Invoke-RestMethod `
+  -Uri "http://localhost:8090/job/Inspire-Arbys-Full-Regression/buildWithParameters?BRAND_PROFILE=arbys&TEST_GROUPS=smoke&HEADLESS=true" `
+  -Method Post `
+  -Headers @{$crumb.crumbRequestField = $crumb.crumb} `
+  -WebSession $session
+```
+
+After the build completes, artifacts are available at:
+
+```
+http://localhost:8090/job/Inspire-Arbys-Full-Regression/<build-number>/artifact/
+```
+
+The `test-output/` folder there contains the **Extent HTML report** (with inline
+screenshots) and logs. Download everything as a single ZIP via the
+`(all files in zip)` link.
+
+---
+
+### How the local workspace mount works
+
+The Jenkins container mounts the project root read-only:
+
+```
+Host path (Windows):    C:\code\...\InspireFranchises\
+Container path:         /workspace/InspireFranchises   (read-only)
+Repository URL in jobs: file:///workspace/InspireFranchises
+```
+
+Jenkins clones from the local filesystem on every build — no GitHub push required.
+Only **committed** changes are visible (standard `git clone` behaviour).
+
+> **Note:** Two JVM flags enable this pattern and are already set in
+> `jenkins/docker-compose.yml`:
+> - `-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true` — permits `file://` URLs
+> - `safe.directory=*` baked into the Dockerfile — resolves Git's ownership check
+>   when a Windows-mounted directory is accessed from a Linux container (Git 2.35+)
+
+---
+
+### Docker files reference
+
+| File | Purpose |
+|------|---------|
+| `testlink/Dockerfile` | PHP 7.4 + Apache + all required PHP extensions + TestLink 1.9.20 source |
+| `testlink/docker-compose.yml` | `testlink_app` (port 8080) + `testlink_db` (MariaDB 10.11); named volumes; DB healthcheck |
+| `testlink/initdb/seed.sql` | Full MariaDB dump — project, suites, TCs, plans, builds, executions |
+| `jenkins/Dockerfile` | Jenkins LTS + JDK 21 + Chrome stable + plugins baked in; `safe.directory=*` set |
+| `jenkins/docker-compose.yml` | Jenkins on port 8090; project root mounted at `/workspace/InspireFranchises`; `ALLOW_LOCAL_CHECKOUT` flag |
+| `jenkins/job-smoke.xml` | Jenkins job config for `Inspire-Arbys-Smoke` pipeline |
+| `jenkins/job-full-regression.xml` | Jenkins job config for `Inspire-Arbys-Full-Regression` pipeline |
+| `jenkins/create-jenkins-jobs.ps1` | PowerShell script — registers both jobs via Jenkins REST API |
+| `Jenkinsfile` | Declarative pipeline: Checkout → Compile → Test → Archive artifacts + JUnit results |
+
+---
+
+### Keeping the seed up to date
+
+After you add new test cases, plans, or execution results in TestLink, refresh
+`seed.sql` so future cloners get the latest state:
+
+```powershell
+docker exec testlink_db mysqldump -u root -proot_secret `
+  --single-transaction --routines --triggers --databases testlink `
+  | Out-File -FilePath testlink/initdb/seed.sql -Encoding UTF8
+
+git add testlink/initdb/seed.sql
+git commit -m "chore(testlink): refresh seed with latest TCs and execution results"
+git push origin master
+```
 
 ---
 
