@@ -31,9 +31,9 @@ RUN google-chrome --version
 # Fix Git "dubious ownership" error for the mounted local workspace.
 # The volume /workspace/InspireFranchises is owned by the Windows host user,
 # but Jenkins runs as UID 1000. Git 2.35+ refuses to access mismatched-owner
-# directories. Register at both system level (/etc/gitconfig) and user level
-# (~jenkins/.gitconfig) so the Jenkins git plugin picks it up in all contexts.
-RUN git config --system --add safe.directory /workspace/InspireFranchises
+# directories. safe.directory=* trusts all directories regardless of ownership,
+# which is appropriate for a local developer Jenkins instance with no external access.
+RUN git config --system safe.directory '*'
 
 # Switch back to the unprivileged jenkins user and register at user level too
 USER jenkins

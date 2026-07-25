@@ -45,6 +45,7 @@ services:
       JAVA_OPTS: >-
         -Djenkins.install.runSetupWizard=false
         -Xmx1g
+        -Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true
       # Pre-configure an admin user (change password before exposing externally)
       JENKINS_ADMIN_ID: admin
       JENKINS_ADMIN_PASSWORD: admin
