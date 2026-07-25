@@ -10,6 +10,16 @@
       "env": {
         "TESTLINK_URL": "http://localhost:8080"
       }
+    },
+    "jenkins": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/jenkins-mcp/index.js"
+      ],
+      "env": {
+        "JENKINS_URL": "http://localhost:8090"
+      }
     }
   }
 }
