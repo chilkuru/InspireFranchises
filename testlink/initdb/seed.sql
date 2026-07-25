@@ -477,7 +477,7 @@ CREATE TABLE `events` (
   PRIMARY KEY (`id`),
   KEY `transaction_id` (`transaction_id`),
   KEY `fired_at` (`fired_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -602,7 +602,19 @@ INSERT INTO `events` VALUES
 (113,69,2,'GUI - Test Project ID : 1','E_NOTICE\nTrying to access array offset on value of type null - in /var/www/html/gui/templates_c/32916e4d428edb29e8817b6c6726333e0ff51ffe_0.file.inc_exec_show_tc_exec.tpl.php - Line 244',1784491308,'PHP',0,NULL),
 (114,70,2,'GUI - Test Project ID : 1','E_NOTICE\nTrying to access array offset on value of type null - in /var/www/html/gui/templates_c/32916e4d428edb29e8817b6c6726333e0ff51ffe_0.file.inc_exec_show_tc_exec.tpl.php - Line 244',1784491309,'PHP',0,NULL),
 (115,71,2,'GUI - Test Project ID : 1','E_NOTICE\nTrying to access array offset on value of type null - in /var/www/html/gui/templates_c/32916e4d428edb29e8817b6c6726333e0ff51ffe_0.file.inc_exec_show_tc_exec.tpl.php - Line 244',1784491315,'PHP',0,NULL),
-(116,72,16,'GUI - Test Project ID : 1','O:18:\"tlMetaStringHelper\":4:{s:5:\"label\";s:21:\"audit_login_succeeded\";s:6:\"params\";a:2:{i:0;s:5:\"admin\";i:1;s:10:\"172.19.0.1\";}s:13:\"bDontLocalize\";b:0;s:14:\"bDontFireEvent\";b:0;}',1784958394,'LOGIN',1,'users');
+(116,72,16,'GUI - Test Project ID : 1','O:18:\"tlMetaStringHelper\":4:{s:5:\"label\";s:21:\"audit_login_succeeded\";s:6:\"params\";a:2:{i:0;s:5:\"admin\";i:1;s:10:\"172.19.0.1\";}s:13:\"bDontLocalize\";b:0;s:14:\"bDontFireEvent\";b:0;}',1784958394,'LOGIN',1,'users'),
+(117,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(118,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(119,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(120,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(121,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(122,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(123,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(124,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(125,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(126,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(127,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL),
+(128,73,2,'GUI','E_WARNING\nUse of undefined constant full - assumed \'full\' (this will throw an Error in a future version of PHP) - in /var/www/html/lib/functions/testsuite.class.php - Line 883',1784999227,'PHP',0,NULL);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1131,42 +1143,12 @@ INSERT INTO `nodes_hierarchy` VALUES
 (75,'Home Page Tests',1,5,0),
 (76,'Arby\'s Brand Page Tests',1,5,0),
 (78,'Common Brand Page Tests',3,2,2),
-(79,'TC-B-06 Verify Here is how we help section is displayed',78,3,0),
-(80,'TC-B-04 Verify GET STARTED navigates to franchise enquiry form',78,3,0),
-(81,'TC-B-02 Verify hero heading contains Franchise with [Brand Name]',78,3,0),
-(82,'TC-B-08 Verify qualification requirements section is displayed',78,3,0),
 (83,'TC-B-03 Verify hero GET STARTED CTA is displayed',78,3,0),
-(84,'TC-B-07 Verify Training Marketing Technology pillars are displayed',78,3,0),
 (85,'TC-B-01 Verify brand page loads at expected URL',78,3,0),
-(86,'',80,4,0),
-(87,'',81,4,0),
-(88,'',86,9,0),
-(89,'',87,9,0),
-(90,'',79,4,0),
-(91,'',82,4,0),
-(92,'',90,9,0),
 (93,'',83,4,0),
-(94,'TC-B-05 Verify Why [Brand]? section is displayed',78,3,0),
-(95,'',91,9,0),
-(96,'',84,4,0),
 (97,'',93,9,0),
-(98,'',96,9,0),
 (99,'',85,4,0),
-(100,'TC-B-10 Verify all five franchise process steps are displayed',78,3,0),
-(101,'',94,4,0),
-(102,'',99,9,0),
-(103,'',101,9,0),
-(104,'',100,4,0),
-(105,'TC-B-09 Verify Whats next section is displayed',78,3,0),
-(106,'',104,9,0),
-(107,'',105,4,0),
-(108,'',107,9,0),
-(109,'TC-B-12 Verify cross-brand links section is displayed',78,3,0),
-(110,'TC-B-11 Verify page footer is displayed',78,3,0),
-(111,'',109,4,0),
-(112,'',110,4,0),
-(113,'',111,9,0),
-(114,'',112,9,0);
+(102,'',99,9,0);
 /*!40000 ALTER TABLE `nodes_hierarchy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1876,18 +1858,8 @@ INSERT INTO `tcsteps` VALUES
 (67,3,'<p>Check visibility of the <strong>Small Format</strong> label.</p>','<p>\'Small Format\' label is visible.</p>',1,2),
 (70,1,'<p>Locate and check visibility of the <strong>Anything is possible with Arby\'s</strong> section.</p>','<p>\'Anything is possible with Arby\'s\' section is visible on the page.</p>',1,2),
 (73,1,'<p>Locate and check visibility of the restaurant count factoid on the Arby\'s page.</p>','<p><strong>3,500 restaurants</strong> factoid text is visible on the page.</p>',1,2),
-(88,1,'Click GET STARTED on the brand page.','Navigation URL contains the franchise form path.',1,2),
-(89,1,'Open the brand page and inspect the hero heading text.','Hero heading contains the expected \'Franchise with\' prefix and brand name.',1,2),
-(92,1,'Open the brand page and locate the support section heading.','The support section is visible.',1,2),
-(95,1,'Open the brand page and locate qualification section.','Qualification requirements section is visible.',1,2),
 (97,1,'Open the brand page and check the hero CTA.','GET STARTED button is visible in the hero section.',1,2),
-(98,1,'Open the support section and inspect all pillars.','Training & Support, Marketing & PR, and Technology & Innovation are visible.',1,2),
-(102,1,'Open the target brand page.','The current URL contains the expected brand page path.',1,2),
-(103,1,'Open the brand page and locate the Why section.','The Why [Brand]? section is visible.',1,2),
-(106,1,'Open the process section and inspect steps.','Apply, Discuss, Review, Interview, and Sign steps are all visible.',1,2),
-(108,1,'Open the brand page and locate the What\'s next section.','What\'s next? section is visible.',1,2),
-(113,1,'Open the brand page and locate cross-brand links section.','The section \'Or franchise with any of Inspire\'s brands\' is visible.',1,2),
-(114,1,'Open the brand page and scroll to footer.','Footer is visible.',1,2);
+(102,1,'Open the target brand page.','The current URL contains the expected brand page path.',1,2);
 /*!40000 ALTER TABLE `tcsteps` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1946,18 +1918,8 @@ INSERT INTO `tcversions` VALUES
 (64,18,1,1,7,'<p>Verify all three Arby\'s restaurant format options (Free Standing, Endcap, Small Format) are displayed on the page.</p>','<p>Browser is on the Arby\'s franchising page.</p>',2,1,'2026-07-19 16:11:34',NULL,'2026-07-19 16:11:34',1,1,2,NULL),
 (69,19,1,1,7,'<p>Verify the \'Anything is possible with Arby\'s\' motivational section is displayed on the Arby\'s franchising page.</p>','<p>Browser is on the Arby\'s franchising page.</p>',2,1,'2026-07-19 16:11:40',NULL,'2026-07-19 16:11:40',1,1,2,NULL),
 (72,20,1,1,7,'<p>Verify the \'3,500 restaurants\' factoid is displayed on the Arby\'s franchising page.</p>','<p>Browser is on the Arby\'s franchising page.</p>',2,1,'2026-07-19 16:11:44',NULL,'2026-07-19 16:11:44',1,1,2,NULL),
-(86,21,1,1,7,'<p>Verify GET STARTED button navigates to the franchise enquiry form.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(87,22,1,1,7,'<p>Verify the hero heading contains \'Franchise with [Brand Name]\'.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(90,23,1,1,7,'<p>Verify the Here\'s how we help section is displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(91,24,1,1,7,'<p>Verify the franchise qualification requirements section is displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
 (93,25,1,1,7,'<p>Verify the hero GET STARTED call-to-action button is displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(96,26,1,1,7,'<p>Verify all support pillars are displayed: Training, Marketing, Technology.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(99,27,1,1,7,'<p>Verify the brand page loads successfully at its expected URL.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(101,28,1,1,7,'<p>Verify the Why [Brand]? section is displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(104,29,1,1,7,'<p>Verify all five franchise process steps are displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(107,30,1,1,7,'<p>Verify the What\'s next? section is displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(111,31,1,1,7,'<p>Verify the cross-brand promotion links section is displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL),
-(112,32,1,1,7,'<p>Verify the page footer is displayed.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL);
+(99,27,1,1,7,'<p>Verify the brand page loads successfully at its expected URL.</p>','',2,1,'2026-07-19 18:41:07',NULL,'2026-07-19 18:41:07',1,1,2,NULL);
 /*!40000 ALTER TABLE `tcversions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2408,7 +2370,7 @@ CREATE TABLE `transactions` (
   `user_id` int(10) unsigned NOT NULL DEFAULT 0,
   `session_id` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2489,7 +2451,8 @@ INSERT INTO `transactions` VALUES
 (69,'/lib/execute/execSetResults.php',1784491308,1784491308,1,'129f8b2ba2455d2846ea5754d14c39d5'),
 (70,'/lib/execute/execSetResults.php',1784491309,1784491309,1,'129f8b2ba2455d2846ea5754d14c39d5'),
 (71,'/lib/execute/execSetResults.php',1784491315,1784491315,1,'129f8b2ba2455d2846ea5754d14c39d5'),
-(72,'/login.php',1784958394,1784958394,1,'91a98cabb6473d622181db22d071e3cf');
+(72,'/login.php',1784958394,1784958394,1,'91a98cabb6473d622181db22d071e3cf'),
+(73,'/lib/api/xmlrpc/v1/xmlrpc.php',1784999227,1784999227,1,'');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2913,4 +2876,4 @@ USE `testlink`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-25 16:00:54
+-- Dump completed on 2026-07-25 17:09:13

@@ -154,22 +154,16 @@ InspireFranchises/
 | TC-H-10 | LinkedIn link present in footer | regression |
 | TC-H-11 | "How do I become a franchisee?" section displayed | regression |
 
-### Common Brand Page (TC-B-01 … TC-B-12) — inherited by every brand test class
+### Common Brand Page (TC-B-01, TC-B-03) — inherited by every brand test class
+
+Two focused smoke checks kept deliberately minimal so that any brand suite
+(`-P arbys`, `-P dunkin`, etc.) runs fast. Deeper section/footer/navigation
+coverage lives in brand-specific test classes.
 
 | TC ID | Description | Group |
 |---|---|---|
 | TC-B-01 | Brand page loads at correct URL | smoke |
-| TC-B-02 | Hero heading contains "Franchise with [Brand]" | smoke |
-| TC-B-03 | Hero "GET STARTED" button displayed | smoke |
-| TC-B-04 | "GET STARTED" navigates to `/franchise-with-us` | smoke |
-| TC-B-05 | "Why [Brand]?" section displayed | regression |
-| TC-B-06 | "Here's how we help" section displayed | regression |
-| TC-B-07 | All three support pillars displayed (Training, Marketing, Technology) | regression |
-| TC-B-08 | Qualification requirements section displayed | regression |
-| TC-B-09 | "What's next?" section displayed | regression |
-| TC-B-10 | All 5 franchise steps (Apply → Sign) displayed | regression |
-| TC-B-11 | Footer displayed | regression |
-| TC-B-12 | Cross-brand promotion links displayed | regression |
+| TC-B-03 | Hero "GET STARTED" CTA button displayed | smoke |
 
 ### Arby's-Specific (TC-A-01 … TC-A-11)
 
@@ -187,7 +181,7 @@ InspireFranchises/
 | TC-A-10 | "Anything is possible with Arby's" section displayed | regression |
 | TC-A-11 | "3,500 restaurants" factoid displayed | regression |
 
-**Total: 34 test cases** (11 home + 12 common brand + 11 Arby's-specific)
+**Total: 24 test cases** (11 home + 2 common brand + 11 Arby's-specific)
 
 ---
 
@@ -287,7 +281,7 @@ Adding a brand (e.g. Dunkin') requires **4 steps** with **zero changes** to exis
    </test>
    ```
 
-All 12 common brand tests (TC-B-01 … TC-B-12) run automatically for the new brand.
+All 2 common brand tests (TC-B-01, TC-B-03) run automatically for the new brand.
 
 ---
 
