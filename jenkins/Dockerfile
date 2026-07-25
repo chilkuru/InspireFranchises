@@ -28,6 +28,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Verify Chrome installation
 RUN google-chrome --version
 
+# Fix Git "dubious ownership" error for the mounted local workspace.
+# The volume /workspace/InspireFranchises is owned by the Windows host user,
+# but Jenkins runs as UID 1000. Git 2.35+ refuses to access mismatched-owner
+# directories. Registering it as a safe.directory at system level (/etc/gitconfig)
+# makes this permanent across container restarts and rebuilds.
+RUN git config --system --add safe.directory /workspace/InspireFranchises
+
 # Switch back to the unprivileged jenkins user
 USER jenkins
 
