@@ -4,6 +4,9 @@
 
 $JenkinsUrl  = "http://localhost:8090"
 $JobsDir     = ".\jenkins"
+# Note: Job XML configs use file:///workspace/InspireFranchises as the repo URL.
+# This requires the project root to be mounted at /workspace/InspireFranchises
+# in the Jenkins container (set in jenkins/docker-compose.yml).
 
 # ── Step 1: Establish session + get crumb ─────────────────────────────────────
 Write-Host "Getting crumb..."

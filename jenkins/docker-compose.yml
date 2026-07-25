@@ -35,6 +35,11 @@ services:
       - jenkins_home:/var/jenkins_home
       # Share the host Docker socket so Jenkins can run Docker commands if needed
       - /var/run/docker.sock:/var/run/docker.sock
+      # Mount the local project root into the container so Jenkins can clone from
+      # the local filesystem instead of GitHub. Path inside container: /workspace/InspireFranchises
+      # Jobs use repository URL: file:///workspace/InspireFranchises
+      # Only committed changes are visible (standard git clone behaviour).
+      - ../:/workspace/InspireFranchises:ro
     environment:
       # Skip the initial setup wizard; use the credentials below
       JAVA_OPTS: >-
