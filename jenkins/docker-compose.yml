@@ -28,8 +28,8 @@ services:
     container_name: jenkins
     restart: unless-stopped
     ports:
-      - "8090:8080"      # Jenkins UI  → http://localhost:8090
-      - "50000:50000"    # Jenkins agent port (JNLP)
+      - "8090:8080" # Jenkins UI  → http://localhost:8090
+      - "50000:50000" # Jenkins agent port (JNLP)
     volumes:
       # Persist all Jenkins configuration, jobs, builds, and plugin data
       - jenkins_home:/var/jenkins_home
@@ -43,15 +43,13 @@ services:
     environment:
       # Skip the initial setup wizard; use the credentials below
       JAVA_OPTS: >-
-        -Djenkins.install.runSetupWizard=false
-        -Xmx1g
-        -Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true
+        -Djenkins.install.runSetupWizard=false -Xmx1g -Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true
       # Pre-configure an admin user (change password before exposing externally)
       JENKINS_ADMIN_ID: admin
       JENKINS_ADMIN_PASSWORD: admin
     # Ensure the jenkins user can write to the Docker socket
     group_add:
-      - "999"   # docker group GID on most Linux hosts (adjust if needed)
+      - "999" # docker group GID on most Linux hosts (adjust if needed)
 
 volumes:
   jenkins_home:

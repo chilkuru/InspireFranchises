@@ -3,7 +3,9 @@
     "testlink": {
       "type": "stdio",
       "command": "node",
-      "args": ["${workspaceFolder}/testlink-mcp/index.js"],
+      "args": [
+        "${workspaceFolder}/testlink-mcp/index.js"
+      ],
       "envFile": "${workspaceFolder}/testlink/.env",
       "env": {
         "TESTLINK_URL": "http://localhost:8080"
