@@ -49,11 +49,15 @@ RUN git config --global --add safe.directory /workspace/InspireFranchises \
 #   git                  — Git SCM support for Pipeline from SCM
 #   junit                — JUnit XML test result publishing
 #   pipeline-stage-view  — Pipeline stage visualization in the UI
+#   mcp-server           — official Jenkins MCP plugin (18 tools: jobs, builds,
+#                          logs, test results, SCM, rebuild, log search, etc.)
+#                          Exposes SSE endpoint at /mcp-server/sse
 RUN jenkins-plugin-cli --plugins \
     workflow-aggregator \
     git \
     junit \
-    pipeline-stage-view
+    pipeline-stage-view \
+    mcp-server
 
 # Disable the Jenkins setup wizard
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
