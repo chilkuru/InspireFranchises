@@ -98,9 +98,14 @@ pipeline {
     post {
 
         always {
-            // Publish JUnit XML results → enables Jenkins test trend graphs
+            // Publish JUnit XML results → enables Jenkins test trend graphs.
+            // Pattern targets only the top-level TEST-TestSuite.xml (the combined
+            // suite report). The recursive **/*.xml glob would also pick up
+            // per-<test>-block XMLs from target/surefire-reports/<suite>/junitreports/
+            // causing each TC to appear 4x in Jenkins (once per XML file that
+            // references it). Using TEST-*.xml avoids that duplication.
             junit(
-                testResults: 'target/surefire-reports/**/*.xml',
+                testResults: 'target/surefire-reports/TEST-*.xml',
                 allowEmptyResults: true,
                 skipPublishingChecks: false
             )
