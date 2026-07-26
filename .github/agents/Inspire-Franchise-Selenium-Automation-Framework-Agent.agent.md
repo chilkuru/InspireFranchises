@@ -317,6 +317,9 @@ The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java c
 3. `create_test_plan` — `Dunkin' Brand Page Tests`
 4. `create_build` — `Build-<date>`
 5. `add_test_case_to_test_plan` × N — wires every TC to the plan
+6. **`create_test_execution` × N** — records the actual pass/fail result for every TC that was already run locally. Every TC must show `p` (pass) or `f` (fail) — **never leave TCs in "Not Tested Yet" state after a local run.**
+
+> After the test run completes (`.\.mvnw.cmd clean test -P <slug>`), the agent reads the Maven Surefire output or the Extent report to determine per-TC pass/fail, then calls `create_test_execution` for every TC against the build just created.
 
 **TestLink structure conventions to maintain:**
 | What | Convention |
@@ -332,7 +335,9 @@ The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java c
 
 ---
 
-### Step 7 — Create Jenkins pipeline jobs and run first smoke build
+### Step 7 — Create Jenkins pipeline jobs and run first smoke build (**MANDATORY — never skip**)
+
+> This step is **not optional**. Every brand onboarding is incomplete until both Jenkins pipeline jobs are created and the smoke build executes successfully. The agent must complete Step 7 immediately after Step 6 without waiting for user prompting.
 
 The official Jenkins MCP plugin (19 tools, SSE transport at `http://localhost:8090/mcp-server/sse`) handles build triggering and monitoring but **cannot create jobs** — job creation uses the Jenkins REST API. This step combines both:
 
@@ -659,3 +664,5 @@ cd InspireFranchises
 13. **Jenkins job names use kebab-case prefix** — derive `$prefix` from the brand display name by replacing spaces with hyphens and removing apostrophes (see the lookup table in Step 7). Format: `Inspire-<Prefix>-Smoke` / `Inspire-<Prefix>-Full-Regression`.
 14. **Jenkins MCP transport is SSE** — endpoint is `http://localhost:8090/mcp-server/sse`. Jetty keepalive is set to 600,000 ms (`--httpKeepAliveTimeout=600000` in `jenkins/docker-compose.yml`) to prevent the 2-minute dropout race condition. Do not change the transport to Streamable HTTP — the official plugin docs flag compatibility issues with Copilot.
 15. **Full brand onboarding sequence**: Steps 1–5 (Java code) → Step 6 (TestLink via MCP) → Step 7 (Jenkins jobs via REST + MCP trigger + monitor). All three must complete before declaring a brand fully onboarded.
+16. **TestLink execution status MUST be recorded after every test run** — call `create_test_execution` for every TC in the plan using the actual result (`p`=pass, `f`=fail, `b`=blocked). Never leave any TC in "Not Tested Yet" state after a local or CI run. Read pass/fail from Maven Surefire output or log lines before making the calls.
+17. **Step 7 is MANDATORY during brand onboarding** — never declare onboarding complete after Step 6. Always proceed immediately to Step 7: create Jenkins jobs (REST API) → trigger smoke build (MCP `triggerBuild`) → monitor (MCP `getQueueItem` + `getBuild`) → record CI result back in TestLink via `create_test_execution`. Do not wait for the user to ask.
