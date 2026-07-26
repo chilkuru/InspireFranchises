@@ -1,6 +1,6 @@
 ---
 description: "Specialized Selenium UI Test Automation Developer for the Inspire Brands Franchising website automation framework. Knows every class, pattern, rule, and hard-won fix in this codebase."
-tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/memory, vscode/runCommand, vscode/vscodeAPI, vscode/extensions, vscode/askQuestions, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, agent/runSubagent, edit/createDirectory, edit/createFile, edit/editFiles, edit/rename, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/usages, web/fetch, browser/openBrowserPage, todo, testlink/*]
+tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/memory, vscode/runCommand, vscode/vscodeAPI, vscode/extensions, vscode/askQuestions, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, agent/runSubagent, edit/createDirectory, edit/createFile, edit/editFiles, edit/rename, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/usages, web/fetch, browser/openBrowserPage, todo, testlink/*, jenkins/*]
 ---
 
 # GitHub Copilot Custom Agent — Inspire Franchise Selenium Automation Framework
@@ -223,7 +223,7 @@ Run a specific group: `.\mvnw.cmd clean test -P arbys -Dgroups=smoke`
 
 ---
 
-## How to Add a New Brand (6 Steps — Zero Existing Files Modified)
+## How to Add a New Brand (7 Steps — Zero Existing Files Modified)
 
 ### Step 1 — Check enum (already present for all 7 brands)
 `Brand.java` already has `BASKIN_ROBBINS`, `DUNKIN`, `SONIC`, etc. No change needed.
@@ -329,6 +329,130 @@ The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java c
 | Test plan name | `<Brand Display Name> Brand Page Tests` |
 
 > **Prerequisites:** Docker must be running (`docker compose up -d` in `testlink/`) before issuing TestLink prompts. Verify with `docker ps --filter name=testlink`.
+
+---
+
+### Step 7 — Create Jenkins pipeline jobs and run first smoke build
+
+The official Jenkins MCP plugin (19 tools, SSE-less Streamable HTTP at `http://localhost:8090/mcp-server/mcp`) handles build triggering and monitoring but **cannot create jobs** — job creation uses the Jenkins REST API. This step combines both:
+
+1. **Create two Jenkins pipeline jobs** via REST API (PowerShell — same mechanism as `create-jenkins-jobs.ps1`)
+2. **Trigger the smoke build** via MCP `triggerBuild`
+3. **Monitor to completion** via MCP `getQueueItem` → `getBuild`
+4. **Retrieve results** via MCP `getTestResults` / `getBuildLog`
+
+**Agent runs this PowerShell to create the jobs (substitute `<DisplayName>` and `<url-slug>`):**
+```powershell
+$JenkinsUrl = "http://localhost:8090"
+$slug       = "baskin-robbins"            # brand URL slug (Maven profile name)
+$display    = "Baskin-Robbins"            # brand display name for description
+$prefix     = "Baskin-Robbins"            # used in Jenkins job name
+
+# ── Crumb (CSRF token) ────────────────────────────────────────────────────────
+$sv = $null
+Invoke-WebRequest "$JenkinsUrl/crumbIssuer/api/json" -UseBasicParsing -SessionVariable sv | Out-Null
+$crumb = ((Invoke-WebRequest "$JenkinsUrl/crumbIssuer/api/json" -UseBasicParsing -WebSession $sv).Content | ConvertFrom-Json).crumb
+$headers = @{ "Jenkins-Crumb" = $crumb; "Content-Type" = "application/xml" }
+
+# ── Job XML generator ─────────────────────────────────────────────────────────
+function New-JobXml($desc, $defaultProfile, $defaultGroups) {
+    return @"
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job">
+  <description>$desc</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>BRAND_PROFILE</name>
+          <choices class="java.util.Arrays`$ArrayList">
+            <a class="string-array"><string>$defaultProfile</string><string>all-brands</string></a>
+          </choices>
+          <description>Maven profile — which brand(s) to test</description>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>TEST_GROUPS</name>
+          <choices class="java.util.Arrays`$ArrayList">
+            <a class="string-array"><string>$defaultGroups</string><string>smoke</string><string>regression</string><string>all</string></a>
+          </choices>
+          <description>TestNG groups filter</description>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>HEADLESS</name><defaultValue>true</defaultValue>
+          <description>Run Chrome in headless mode</description>
+        </hudson.model.BooleanParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-scm-step">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig><url>file:///workspace/InspireFranchises</url></hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches><hudson.plugins.git.BranchSpec><name>*/master</name></hudson.plugins.git.BranchSpec></branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <submoduleCfg class="empty-list" /><extensions />
+    </scm>
+    <scriptPath>Jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
+  </definition>
+  <triggers /><disabled>false</disabled>
+</flow-definition>
+"@
+}
+
+# ── Create Smoke job ──────────────────────────────────────────────────────────
+$smokeName = "Inspire-$prefix-Smoke"
+$smokeXml  = New-JobXml "$display Smoke Tests — fast sanity pass (smoke group only). Headless Chrome." $slug "smoke"
+try {
+    $r = Invoke-WebRequest "$JenkinsUrl/createItem?name=$smokeName" -Method POST -Headers $headers -Body $smokeXml -UseBasicParsing -WebSession $sv
+    Write-Host "✅ Created $smokeName : HTTP $($r.StatusCode)"
+} catch {
+    if ($_.Exception.Response.StatusCode.value__ -eq 400) { Write-Host "⚠️  $smokeName already exists" }
+    else { throw }
+}
+
+# ── Create Full-Regression job ────────────────────────────────────────────────
+$fullName = "Inspire-$prefix-Full-Regression"
+$fullXml  = New-JobXml "$display Full Regression — all test groups. Headless Chrome." $slug "all"
+try {
+    $r = Invoke-WebRequest "$JenkinsUrl/createItem?name=$fullName" -Method POST -Headers $headers -Body $fullXml -UseBasicParsing -WebSession $sv
+    Write-Host "✅ Created $fullName : HTTP $($r.StatusCode)"
+} catch {
+    if ($_.Exception.Response.StatusCode.value__ -eq 400) { Write-Host "⚠️  $fullName already exists" }
+    else { throw }
+}
+
+Write-Host "`nJobs created. Triggering smoke build via MCP next."
+```
+
+**After jobs are created, the agent uses Jenkins MCP tools to trigger and monitor:**
+
+| MCP Tool | When | Purpose |
+|----------|------|---------|
+| `triggerBuild` | Immediately after job creation | Kick off smoke run with `BRAND_PROFILE=<slug>`, `TEST_GROUPS=smoke`, `HEADLESS=true` |
+| `getQueueItem` | After trigger | Wait until build exits the queue and gets a build number |
+| `getBuild` | Polling until `building=false` | Monitor build status (RUNNING → SUCCESS/FAILURE) |
+| `getTestResults` | After build completes | Retrieve pass/fail/skip counts |
+| `getBuildLog` | On failure | Show last 100 lines of console output for diagnosis |
+
+**Copilot prompt to trigger after job creation:**
+> "Trigger the `Inspire-Baskin-Robbins-Smoke` Jenkins job with BRAND_PROFILE=baskin-robbins, TEST_GROUPS=smoke, HEADLESS=true. Monitor until complete and report test results."
+
+**Jenkins job naming convention:**
+| Job | Name pattern | Default groups |
+|-----|-------------|----------------|
+| Smoke | `Inspire-<PascalCaseBrand>-Smoke` | `smoke` first |
+| Full Regression | `Inspire-<PascalCaseBrand>-Full-Regression` | `all` first |
+
+> **Prerequisites:** Jenkins container must be running (`docker compose up -d` in `jenkins/`) and the workspace volume mounted at `/workspace/InspireFranchises`. Verify with `Invoke-RestMethod http://localhost:8090/mcp-health`.
+
+**Complete Step 7 prompt for Copilot:**
+> "Complete Jenkins onboarding for Baskin-Robbins: (1) create pipeline jobs Inspire-Baskin-Robbins-Smoke and Inspire-Baskin-Robbins-Full-Regression via Jenkins REST API using the PowerShell template, (2) trigger the Smoke job with BRAND_PROFILE=baskin-robbins TEST_GROUPS=smoke HEADLESS=true, (3) monitor until the build finishes, (4) report the test result summary."
+
+---
 
 ```powershell
 # Prerequisites: JDK 21, Chrome browser, internet access (first run downloads Maven)
@@ -519,3 +643,6 @@ cd InspireFranchises
 9. **`@BeforeMethod` order**: `BaseTest.setUpMethod()` runs before `AbstractBrandTest.openBrandPage()` — TestNG guarantees parent `@BeforeMethod` runs first.
 10. **`isVisibleAfterWait(element)`** is the only safe visibility check — never call `element.isDisplayed()` directly in page objects.
 11. **When debugging failures**, always check the Extent report screenshot first — it captures the browser state at the exact moment of failure.
+12. **Jenkins job creation uses REST API** — the Jenkins MCP plugin has no `createJob` tool. Always use the PowerShell template in Step 7 to POST the job XML to `/createItem`. After creation, use MCP `triggerBuild` + `getQueueItem` + `getBuild` + `getTestResults` for all subsequent orchestration.
+13. **Jenkins job names use PascalCase brand prefix** — `Inspire-Baskin-Robbins-Smoke`, `Inspire-Jimmy-Johns-Smoke`, `Inspire-Buffalo-Wild-Wings-Smoke`. Derive from display name: replace spaces/apostrophes with hyphens, remove `'`.
+14. **Full brand onboarding sequence**: Steps 1–5 (Java code) → Step 6 (TestLink via MCP) → Step 7 (Jenkins jobs via REST + MCP trigger + monitor). All three must complete before declaring a brand fully onboarded.
