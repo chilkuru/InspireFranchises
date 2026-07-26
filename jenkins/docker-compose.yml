@@ -43,7 +43,7 @@ services:
     # Extend Jetty's keep-alive timeout to 10 min so MCP SSE connections
     # are not dropped mid-session (default Jetty idle is ~30 s which causes
     # 'terminated: other side closed' errors with persistent SSE streams).
-    command: ["--httpKeepAliveTimeout=600000"]
+    command: [ "--httpKeepAliveTimeout=600000" ]
     environment:
       # Skip the initial setup wizard; use the credentials below
       JAVA_OPTS: >-
