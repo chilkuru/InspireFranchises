@@ -8,6 +8,27 @@ $JobsDir     = ".\jenkins"
 # This requires the project root to be mounted at /workspace/InspireFranchises
 # in the Jenkins container (set in jenkins/docker-compose.yml).
 
+# ── GUARD: Ensure Jenkinsfile + job XMLs are committed before ANY job runs ────
+# Why: Declarative Pipeline's parameters{} block overwrites job-level parameter
+# choices on every build using whatever choices are in the checked-out Jenkinsfile.
+# If the Jenkinsfile hasn't been committed, Jenkins uses the old version and
+# resets the BRAND_PROFILE choices, dropping newly added brands.
+#
+# This check aborts the script when there are uncommitted changes to any of the
+# files that define pipeline parameters, forcing the caller to commit first.
+Write-Host "Checking git status for pipeline-critical files..."
+$dirty = git status --porcelain Jenkinsfile jenkins\job-*.xml 2>&1
+if ($dirty) {
+    Write-Host ""
+    Write-Host "  ❌ ABORT: The following pipeline-critical files have uncommitted changes:"
+    $dirty | ForEach-Object { Write-Host "     $_" }
+    Write-Host ""
+    Write-Host "  Commit them first:  git add Jenkinsfile jenkins\job-*.xml ; git commit -m 'your message'"
+    Write-Host "  Then re-run this script."
+    exit 1
+}
+Write-Host "  ✅ All pipeline files are committed."
+
 # ── Step 1: Establish session + get crumb ─────────────────────────────────────
 Write-Host "Getting crumb..."
 Invoke-WebRequest "$JenkinsUrl/crumbIssuer/api/json" -UseBasicParsing -SessionVariable sv | Out-Null
@@ -80,7 +101,30 @@ try {
     }
 }
 
-# ── Step 6: Verify ────────────────────────────────────────────────────────────
+# ── Step 6: Sync BRAND_PROFILE choices on all jobs via Groovy ────────────────
+# Why: Even though each job XML has the correct choices, a pipeline run can
+# overwrite them from the Jenkinsfile's parameters{} block. This Groovy call
+# sets the choices to exactly what's in the Jenkinsfile — making the live jobs
+# authoritative immediately, independent of when the first build runs.
+Write-Host "`nSyncing BRAND_PROFILE parameter choices on all jobs via Groovy script..."
+$allBrands = @()
+$jenkinsfileContent = Get-Content -Raw .\Jenkinsfile
+if ($jenkinsfileContent -match "choices:\s*\[([^\]]+)\]") {
+    $allBrands = $Matches[1] -split "," | ForEach-Object { ($_ -replace "['"`"\s]","").Trim() } | Where-Object { $_ -ne "" }
+    Write-Host "  Brands from Jenkinsfile: $($allBrands -join ', ')"
+} else {
+    Write-Host "  ⚠️  Could not parse brands from Jenkinsfile — using hardcoded fallback"
+    $allBrands = @("baskin-robbins","arbys","all-brands")
+}
+
+$brandList = ($allBrands | ForEach-Object { "`"$_`"" }) -join ","
+$groovy = "import jenkins.model.*; import hudson.model.*; def brands = [$brandList]; Jenkins.instance.items.each { job -> def pd=job.getProperty(ParametersDefinitionProperty); if(!pd) return; pd.parameterDefinitions.each { p -> if(p instanceof ChoiceParameterDefinition && p.name=='BRAND_PROFILE'){ p.choices=brands; println('Updated '+job.name+' -> '+p.choices) } }; job.save() }; println('Sync done')"
+$body = "script=" + [Uri]::EscapeDataString($groovy)
+$groovyHeaders = @{ "Jenkins-Crumb" = $crumb; "Content-Type" = "application/x-www-form-urlencoded" }
+$gr = Invoke-WebRequest "$JenkinsUrl/scriptText" -Method POST -Headers $groovyHeaders -Body $body -UseBasicParsing -WebSession $sv
+Write-Host $gr.Content
+
+# ── Step 7: Verify ────────────────────────────────────────────────────────────
 Write-Host "`nVerifying jobs on Jenkins dashboard..."
 $jobs = (Invoke-WebRequest "$JenkinsUrl/api/json?tree=jobs[name,url]" -UseBasicParsing -WebSession $sv).Content | ConvertFrom-Json
 $jobs.jobs | Format-Table name, url -AutoSize
