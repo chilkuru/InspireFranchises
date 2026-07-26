@@ -334,19 +334,19 @@ The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java c
 
 ### Step 7 — Create Jenkins pipeline jobs and run first smoke build
 
-The official Jenkins MCP plugin (19 tools, SSE-less Streamable HTTP at `http://localhost:8090/mcp-server/mcp`) handles build triggering and monitoring but **cannot create jobs** — job creation uses the Jenkins REST API. This step combines both:
+The official Jenkins MCP plugin (19 tools, SSE transport at `http://localhost:8090/mcp-server/sse`) handles build triggering and monitoring but **cannot create jobs** — job creation uses the Jenkins REST API. This step combines both:
 
 1. **Create two Jenkins pipeline jobs** via REST API (PowerShell — same mechanism as `create-jenkins-jobs.ps1`)
 2. **Trigger the smoke build** via MCP `triggerBuild`
 3. **Monitor to completion** via MCP `getQueueItem` → `getBuild`
 4. **Retrieve results** via MCP `getTestResults` / `getBuildLog`
 
-**Agent runs this PowerShell to create the jobs (substitute `<DisplayName>` and `<url-slug>`):**
+**Agent runs this PowerShell to create the jobs (substitute the three variables at the top):**
 ```powershell
 $JenkinsUrl = "http://localhost:8090"
-$slug       = "baskin-robbins"            # brand URL slug (Maven profile name)
-$display    = "Baskin-Robbins"            # brand display name for description
-$prefix     = "Baskin-Robbins"            # used in Jenkins job name
+$slug       = "<url-slug>"        # brand URL slug = Maven profile name (e.g. dunkin, sonic)
+$display    = "<Display Name>"    # human-readable brand name (e.g. Dunkin', SONIC)
+$prefix     = "<Prefix>"          # PascalCase, used in Jenkins job name (e.g. Dunkin, Sonic)
 
 # ── Crumb (CSRF token) ────────────────────────────────────────────────────────
 $sv = $null
@@ -439,18 +439,30 @@ Write-Host "`nJobs created. Triggering smoke build via MCP next."
 | `getBuildLog` | On failure | Show last 100 lines of console output for diagnosis |
 
 **Copilot prompt to trigger after job creation:**
-> "Trigger the `Inspire-Baskin-Robbins-Smoke` Jenkins job with BRAND_PROFILE=baskin-robbins, TEST_GROUPS=smoke, HEADLESS=true. Monitor until complete and report test results."
+> "Trigger the `Inspire-<Prefix>-Smoke` Jenkins job with BRAND_PROFILE=\<slug\>, TEST_GROUPS=smoke, HEADLESS=true. Monitor until complete and report test results."
 
 **Jenkins job naming convention:**
 | Job | Name pattern | Default groups |
 |-----|-------------|----------------|
-| Smoke | `Inspire-<PascalCaseBrand>-Smoke` | `smoke` first |
-| Full Regression | `Inspire-<PascalCaseBrand>-Full-Regression` | `all` first |
+| Smoke | `Inspire-<Prefix>-Smoke` | `smoke` first |
+| Full Regression | `Inspire-<Prefix>-Full-Regression` | `all` first |
+
+**Prefix derivation from brand display name:** replace spaces with hyphens, remove apostrophes.
+
+| Brand | `$slug` | `$prefix` | Smoke job name |
+|-------|---------|-----------|----------------|
+| Arby's | `arbys` | `Arbys` | `Inspire-Arbys-Smoke` |
+| Baskin-Robbins | `baskin-robbins` | `Baskin-Robbins` | `Inspire-Baskin-Robbins-Smoke` |
+| Buffalo Wild Wings | `buffalo-wild-wings` | `Buffalo-Wild-Wings` | `Inspire-Buffalo-Wild-Wings-Smoke` |
+| Dunkin' | `dunkin` | `Dunkin` | `Inspire-Dunkin-Smoke` |
+| Jimmy John's | `jimmy-johns` | `Jimmy-Johns` | `Inspire-Jimmy-Johns-Smoke` |
+| SONIC | `sonic` | `Sonic` | `Inspire-Sonic-Smoke` |
+| BWW GO | `bww-go` | `BWW-GO` | `Inspire-BWW-GO-Smoke` |
 
 > **Prerequisites:** Jenkins container must be running (`docker compose up -d` in `jenkins/`) and the workspace volume mounted at `/workspace/InspireFranchises`. Verify with `Invoke-RestMethod http://localhost:8090/mcp-health`.
 
-**Complete Step 7 prompt for Copilot:**
-> "Complete Jenkins onboarding for Baskin-Robbins: (1) create pipeline jobs Inspire-Baskin-Robbins-Smoke and Inspire-Baskin-Robbins-Full-Regression via Jenkins REST API using the PowerShell template, (2) trigger the Smoke job with BRAND_PROFILE=baskin-robbins TEST_GROUPS=smoke HEADLESS=true, (3) monitor until the build finishes, (4) report the test result summary."
+**Complete Step 7 prompt for Copilot (replace \<Brand\> and \<slug\> before pasting):**
+> "Complete Jenkins onboarding for \<Brand Display Name\>: (1) create pipeline jobs `Inspire-<Prefix>-Smoke` and `Inspire-<Prefix>-Full-Regression` via Jenkins REST API using the PowerShell template in Step 7 of the agent instructions, (2) trigger the Smoke job with BRAND_PROFILE=\<slug\> TEST_GROUPS=smoke HEADLESS=true, (3) monitor until the build finishes, (4) report the test result summary."
 
 ---
 
@@ -644,5 +656,6 @@ cd InspireFranchises
 10. **`isVisibleAfterWait(element)`** is the only safe visibility check — never call `element.isDisplayed()` directly in page objects.
 11. **When debugging failures**, always check the Extent report screenshot first — it captures the browser state at the exact moment of failure.
 12. **Jenkins job creation uses REST API** — the Jenkins MCP plugin has no `createJob` tool. Always use the PowerShell template in Step 7 to POST the job XML to `/createItem`. After creation, use MCP `triggerBuild` + `getQueueItem` + `getBuild` + `getTestResults` for all subsequent orchestration.
-13. **Jenkins job names use PascalCase brand prefix** — `Inspire-Baskin-Robbins-Smoke`, `Inspire-Jimmy-Johns-Smoke`, `Inspire-Buffalo-Wild-Wings-Smoke`. Derive from display name: replace spaces/apostrophes with hyphens, remove `'`.
-14. **Full brand onboarding sequence**: Steps 1–5 (Java code) → Step 6 (TestLink via MCP) → Step 7 (Jenkins jobs via REST + MCP trigger + monitor). All three must complete before declaring a brand fully onboarded.
+13. **Jenkins job names use kebab-case prefix** — derive `$prefix` from the brand display name by replacing spaces with hyphens and removing apostrophes (see the lookup table in Step 7). Format: `Inspire-<Prefix>-Smoke` / `Inspire-<Prefix>-Full-Regression`.
+14. **Jenkins MCP transport is SSE** — endpoint is `http://localhost:8090/mcp-server/sse`. Jetty keepalive is set to 600,000 ms (`--httpKeepAliveTimeout=600000` in `jenkins/docker-compose.yml`) to prevent the 2-minute dropout race condition. Do not change the transport to Streamable HTTP — the official plugin docs flag compatibility issues with Copilot.
+15. **Full brand onboarding sequence**: Steps 1–5 (Java code) → Step 6 (TestLink via MCP) → Step 7 (Jenkins jobs via REST + MCP trigger + monitor). All three must complete before declaring a brand fully onboarded.
