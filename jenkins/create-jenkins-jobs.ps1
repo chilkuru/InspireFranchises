@@ -50,7 +50,37 @@ try {
     }
 }
 
-# ── Step 4: Verify ────────────────────────────────────────────────────────────
+# ── Step 4: Create Inspire-BaskinRobbins-Smoke ────────────────────────────────
+Write-Host "`nCreating Inspire-BaskinRobbins-Smoke..."
+$brSmokeXml = [System.IO.File]::ReadAllText("$JobsDir\job-baskin-robbins-smoke.xml")
+try {
+    $r = Invoke-WebRequest "$JenkinsUrl/createItem?name=Inspire-BaskinRobbins-Smoke" `
+         -Method POST -Headers $headers -Body $brSmokeXml -UseBasicParsing -WebSession $sv
+    Write-Host "  ✅ Created: HTTP $($r.StatusCode)"
+} catch {
+    if ($_.Exception.Response.StatusCode.value__ -eq 400) {
+        Write-Host "  ⚠️  Already exists (HTTP 400) — skipping"
+    } else {
+        Write-Host "  ❌ Error: $($_.Exception.Message)"
+    }
+}
+
+# ── Step 5: Create Inspire-BaskinRobbins-Full-Regression ──────────────────────
+Write-Host "`nCreating Inspire-BaskinRobbins-Full-Regression..."
+$brFullXml = [System.IO.File]::ReadAllText("$JobsDir\job-baskin-robbins-regression.xml")
+try {
+    $r = Invoke-WebRequest "$JenkinsUrl/createItem?name=Inspire-BaskinRobbins-Full-Regression" `
+         -Method POST -Headers $headers -Body $brFullXml -UseBasicParsing -WebSession $sv
+    Write-Host "  ✅ Created: HTTP $($r.StatusCode)"
+} catch {
+    if ($_.Exception.Response.StatusCode.value__ -eq 400) {
+        Write-Host "  ⚠️  Already exists (HTTP 400) — skipping"
+    } else {
+        Write-Host "  ❌ Error: $($_.Exception.Message)"
+    }
+}
+
+# ── Step 6: Verify ────────────────────────────────────────────────────────────
 Write-Host "`nVerifying jobs on Jenkins dashboard..."
 $jobs = (Invoke-WebRequest "$JenkinsUrl/api/json?tree=jobs[name,url]" -UseBasicParsing -WebSession $sv).Content | ConvertFrom-Json
 $jobs.jobs | Format-Table name, url -AutoSize
