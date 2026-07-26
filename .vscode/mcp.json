@@ -12,8 +12,8 @@
       }
     },
     "jenkins": {
-      "type": "sse",
-      "url": "http://localhost:8090/mcp-server/sse"
+      "type": "http",
+      "url": "http://localhost:8090/mcp-server/mcp"
     }
   }
 }
