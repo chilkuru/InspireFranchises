@@ -12,7 +12,7 @@ import org.testng.annotations.BeforeMethod;
  *
  * <p>
  * Contains all <em>common</em> test cases that apply to every brand page on
- * the Inspire Brands Franchising website (TC-B-01 … TC-B-12). Concrete brand
+ * the Inspire Brands Franchising website (TC-B-01 … TC-B-03). Concrete brand
  * test classes (e.g. {@link ArbysTest}) extend this class and automatically
  * inherit all common tests plus add brand-specific ones.
  *

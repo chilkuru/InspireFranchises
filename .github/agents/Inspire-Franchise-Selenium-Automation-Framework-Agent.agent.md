@@ -1,6 +1,6 @@
 ---
 description: "Specialized Selenium UI Test Automation Developer for the Inspire Brands Franchising website automation framework. Knows every class, pattern, rule, and hard-won fix in this codebase."
-tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/memory, vscode/runCommand, vscode/vscodeAPI, vscode/extensions, vscode/askQuestions, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, agent/runSubagent, edit/createDirectory, edit/createFile, edit/editFiles, edit/rename, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/usages, web/fetch, browser/openBrowserPage, todo, testlink/*, jenkins/*]
+tools: [vscode/installExtension, vscode/memory, vscode/runCommand, vscode/vscodeAPI, vscode/extensions, vscode/askQuestions, execute/getTerminalOutput, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, execute/testFailure, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, agent, edit/createDirectory, edit/createFile, edit/editFiles, edit/rename, search, web/fetch, browser/openBrowserPage, 'testlink/*', vscodeTasks/createAndRunTask, vscodeTasks/problems, vscodeBrowser/openBrowserPage, vscodeGeneral/rename, vscodeGeneral/runTests, vscodeGeneral/testFailure, 'jenkins/*', todo]
 ---
 
 # GitHub Copilot Custom Agent — Inspire Franchise Selenium Automation Framework
@@ -304,7 +304,9 @@ Add to `testng-suites/testng-all.xml`:
 Create `testng-suites/testng-dunkin.xml` following the `testng-arbys.xml` pattern.
 Add to `pom.xml` profiles following the `arbys` profile pattern.
 
-### Step 6 — Register the brand in TestLink (via MCP)
+### Step 6 — Register the brand in TestLink (via MCP) (**MANDATORY — never skip**)
+
+> This step is **not optional**. Every brand onboarding is incomplete until the TestLink suite, all test cases, a test plan, a build, and execution results are recorded. The agent must complete Step 6 immediately after Step 5 without waiting for user prompting.
 
 The TestLink MCP server is always running (`.vscode/mcp.json`). After the Java code is in place, use Copilot chat to create the TestLink structure so every TC is traceable and executable from TestLink.
 
@@ -663,7 +665,7 @@ cd InspireFranchises
 12. **Jenkins job creation uses REST API** — the Jenkins MCP plugin has no `createJob` tool. Always use the PowerShell template in Step 7 to POST the job XML to `/createItem`. After creation, use MCP `triggerBuild` + `getQueueItem` + `getBuild` + `getTestResults` for all subsequent orchestration.
 13. **Jenkins job names use kebab-case prefix** — derive `$prefix` from the brand display name by replacing spaces with hyphens and removing apostrophes (see the lookup table in Step 7). Format: `Inspire-<Prefix>-Smoke` / `Inspire-<Prefix>-Full-Regression`.
 14. **Jenkins MCP transport is SSE** — endpoint is `http://localhost:8090/mcp-server/sse`. Jetty keepalive is set to 600,000 ms (`--httpKeepAliveTimeout=600000` in `jenkins/docker-compose.yml`) to prevent the 2-minute dropout race condition. Do not change the transport to Streamable HTTP — the official plugin docs flag compatibility issues with Copilot.
-15. **Full brand onboarding sequence**: Steps 1–5 (Java code) → Step 6 (TestLink via MCP) → Step 7 (Jenkins jobs via REST + MCP trigger + monitor). All three must complete before declaring a brand fully onboarded.
+15. **Full brand onboarding sequence**: Steps 1–5 (Java code) → Step 6 (TestLink via MCP — **mandatory**) → Step 7 (Jenkins jobs via REST + MCP trigger + monitor — **mandatory**). All three phases must complete before declaring a brand fully onboarded. Never stop at Step 5.
 16. **TestLink execution status MUST be recorded after every test run** — call `create_test_execution` for every TC in the plan using the actual result (`p`=pass, `f`=fail, `b`=blocked). Never leave any TC in "Not Tested Yet" state after a local or CI run. Read pass/fail from Maven Surefire output or log lines before making the calls.
 17. **Step 7 is MANDATORY during brand onboarding** — never declare onboarding complete after Step 6. Always proceed immediately to Step 7: create Jenkins jobs (REST API) → trigger smoke build (MCP `triggerBuild`) → monitor (MCP `getQueueItem` + `getBuild`) → record CI result back in TestLink via `create_test_execution`. Do not wait for the user to ask.
 18. **Commit Jenkinsfile and job XMLs to git BEFORE triggering any Jenkins build** — Declarative Pipeline's `parameters{}` block overwrites every job's stored parameter choices on every run using the checked-out Jenkinsfile. If the Jenkinsfile has not been committed, Jenkins uses the stale version and silently drops newly added brands from `BRAND_PROFILE`. The mandatory sequence is: (a) edit Jenkinsfile + job XMLs, (b) `git add Jenkinsfile jenkins/job-*.xml`, (c) `git commit`, (d) THEN trigger any build. The `create-jenkins-jobs.ps1` script enforces this with a `git status` guard that aborts when uncommitted changes are detected.
