@@ -24,7 +24,7 @@ pipeline {
     parameters {
         choice(
             name: 'BRAND_PROFILE',
-            choices: ['arbys', 'baskin-robbins', 'all-brands'],
+            choices: ['arbys', 'all-brands'],
             description: 'Maven profile — which brand(s) to test'
         )
         choice(

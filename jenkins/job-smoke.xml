@@ -11,7 +11,6 @@
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>arbys</string>
-              <string>baskin-robbins</string>
               <string>all-brands</string>
             </a>
           </choices>
