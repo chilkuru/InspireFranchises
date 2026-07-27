@@ -173,6 +173,14 @@
         </profile>
 
         <profile>
+            <id>baskin-robbins</id>
+            <properties>
+                <active.brand>baskin-robbins</active.brand>
+                <testng.suite.file>testng-suites/testng-baskin-robbins.xml</testng.suite.file>
+            </properties>
+        </profile>
+
+        <profile>
             <id>all-brands</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
