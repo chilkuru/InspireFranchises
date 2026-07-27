@@ -71,37 +71,7 @@ try {
     }
 }
 
-# ---- Step 4: Create Inspire-BaskinRobbins-Smoke ----------------------------------------------------------------
-Write-Host "`nCreating Inspire-BaskinRobbins-Smoke..."
-$brSmokeXml = [System.IO.File]::ReadAllText("$JobsDir\job-baskin-robbins-smoke.xml")
-try {
-    $r = Invoke-WebRequest "$JenkinsUrl/createItem?name=Inspire-BaskinRobbins-Smoke" `
-         -Method POST -Headers $headers -Body $brSmokeXml -UseBasicParsing -WebSession $sv
-    Write-Host "  [OK] Created: HTTP $($r.StatusCode)"
-} catch {
-    if ($_.Exception.Response.StatusCode.value__ -eq 400) {
-        Write-Host "  [!]  Already exists (HTTP 400) -- skipping"
-    } else {
-        Write-Host "  [ERROR] Error: $($_.Exception.Message)"
-    }
-}
-
-# ---- Step 5: Create Inspire-BaskinRobbins-Full-Regression --------------------------------------------
-Write-Host "`nCreating Inspire-BaskinRobbins-Full-Regression..."
-$brFullXml = [System.IO.File]::ReadAllText("$JobsDir\job-baskin-robbins-regression.xml")
-try {
-    $r = Invoke-WebRequest "$JenkinsUrl/createItem?name=Inspire-BaskinRobbins-Full-Regression" `
-         -Method POST -Headers $headers -Body $brFullXml -UseBasicParsing -WebSession $sv
-    Write-Host "  [OK] Created: HTTP $($r.StatusCode)"
-} catch {
-    if ($_.Exception.Response.StatusCode.value__ -eq 400) {
-        Write-Host "  [!]  Already exists (HTTP 400) -- skipping"
-    } else {
-        Write-Host "  [ERROR] Error: $($_.Exception.Message)"
-    }
-}
-
-# ---- Step 6: Sync BRAND_PROFILE choices on all jobs via Groovy --------------------------------
+# ---- Step 4: Sync BRAND_PROFILE choices on all jobs via Groovy choices on all jobs via Groovy --------------------------------
 # Why: Even though each job XML has the correct choices, a pipeline run can
 # overwrite them from the Jenkinsfile's parameters{} block. This Groovy call
 # sets the choices to exactly what's in the Jenkinsfile -- making the live jobs
@@ -118,7 +88,7 @@ if ($jenkinsfileContent -match 'choices:\s*\[([^\]]+)\]') {
     Write-Host "  Brands from Jenkinsfile: $($allBrands -join ', ')"
 } else {
     Write-Host "  WARNING: Could not parse brands from Jenkinsfile -- using hardcoded fallback"
-    $allBrands = @("arbys","baskin-robbins","all-brands")
+    $allBrands = @("arbys","all-brands")
 }
 
 # Build single-quoted Groovy list, e.g.: 'arbys','baskin-robbins','all-brands'
@@ -144,7 +114,7 @@ $groovyHeaders = @{ "Jenkins-Crumb" = $crumb; "Content-Type" = "application/x-ww
 $gr = Invoke-WebRequest "$JenkinsUrl/scriptText" -Method POST -Headers $groovyHeaders -Body $body -UseBasicParsing -WebSession $sv
 Write-Host $gr.Content
 
-# ---- Step 7: Verify ------------------------------------------------------------------------------------------------------------------------
+# ---- Step 5: Verify ------------------------------------------------------------------------------------------------------------------------
 Write-Host "`nVerifying jobs on Jenkins dashboard..."
 $jobs = (Invoke-WebRequest "$JenkinsUrl/api/json?tree=jobs[name,url]" -UseBasicParsing -WebSession $sv).Content | ConvertFrom-Json
 $jobs.jobs | Format-Table name, url -AutoSize
