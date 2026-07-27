@@ -1,7 +1,6 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <flow-definition plugin="workflow-job">
-  <description>Arby's Full Regression — all test groups (TC-A + TC-B). Headless Chrome, pulls
-    Jenkinsfile from GitHub master.</description>
+  <description>Baskin-Robbins Smoke Tests — fast sanity pass (smoke group only). Headless Chrome.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.model.ParametersDefinitionProperty>
@@ -10,7 +9,6 @@
           <name>BRAND_PROFILE</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>arbys</string>
               <string>baskin-robbins</string>
               <string>all-brands</string>
             </a>
@@ -21,8 +19,8 @@
           <name>TEST_GROUPS</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>all</string>
               <string>smoke</string>
+              <string>all</string>
               <string>regression</string>
             </a>
           </choices>
